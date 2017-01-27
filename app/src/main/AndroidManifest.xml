@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="apps.savvisingh.nanakshahicalendar">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
     <application
         android:name=".util.MyApplication"
         android:allowBackup="true"
@@ -12,7 +14,7 @@
         <activity
             android:name=".activities.HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.LauncherActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -27,7 +29,24 @@
         <activity
             android:name=".activities.EventActivity"
             android:label="@string/title_activity_event"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+            android:name=".service.AlarmService"
+            android:exported="false" />
+
+        <receiver
+            android:name=".broadcast_receiver.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true" />
+        <receiver
+            android:name=".broadcast_receiver.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

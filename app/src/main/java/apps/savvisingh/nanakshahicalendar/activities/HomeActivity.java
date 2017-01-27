@@ -35,6 +35,7 @@ import java.util.Locale;
 import apps.savvisingh.nanakshahicalendar.adapter.BottomSheetAdapter;
 import apps.savvisingh.nanakshahicalendar.R;
 import apps.savvisingh.nanakshahicalendar.calendarview.CustomEvent;
+import apps.savvisingh.nanakshahicalendar.service.AlarmService;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -81,6 +82,7 @@ public class HomeActivity extends AppCompatActivity
 
         Log.d("events", String.valueOf(realm.where(apps.savvisingh.nanakshahicalendar.classes.Event.class).count()));
 
+        AlarmService.setAlarm(this);
 
     }
 
@@ -173,7 +175,7 @@ public class HomeActivity extends AppCompatActivity
                 if (cellView == null) {
                     LayoutInflater inflater = LayoutInflater.from(HomeActivity.this);
                     cellView = (BaseCellView) inflater.inflate(R.layout.week_cell_view, null);
-                    cellView.setTextSize(14);
+                    cellView.setTextSize(15);
                 }
                 return cellView;
             }
@@ -191,7 +193,7 @@ public class HomeActivity extends AppCompatActivity
                 List<CustomEvent> colorLst = new ArrayList<>();
 
                 RealmResults<apps.savvisingh.nanakshahicalendar.classes.Event> results = realm.where(apps.savvisingh.nanakshahicalendar.classes.Event.class).equalTo("day", day)
-                        .equalTo("month", month+1).equalTo("year", year).findAll();
+                        .equalTo("month", month).equalTo("year", year).findAll();
 
                 if(results.size()>0){
                     Log.d("Events", results.size() +" ");
@@ -227,35 +229,17 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onDateClick(int year, int month, int day) {
 
-                String dateStr = "";
-                if(day>9){
-                    dateStr+=day;
-                }else {
-                    dateStr+= "0" + day;
-                }
 
-                if(month+1 >9){
-                    dateStr += "/" + month+1;
-                }else {
-                    dateStr += "/" + "0" + month+1;
-                }
+                Calendar cal = Calendar.getInstance();
+                cal.set(year, month, day);
 
-                dateStr+="/"+year;
+                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                String formattedDate = df.format(cal.getTime());
 
-                SimpleDateFormat curFormater = new SimpleDateFormat("dd/MM/yyyy");
-                Date dateObj = null;
-                try {
-                    dateObj = curFormater.parse(dateStr);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                SimpleDateFormat postFormater = new SimpleDateFormat("dd-MMM-yyyy");
-
-                String newDateStr = postFormater.format(dateObj);
-                getSupportActionBar().setTitle(newDateStr);
+                getSupportActionBar().setTitle(formattedDate);
 
                 RealmResults<apps.savvisingh.nanakshahicalendar.classes.Event> realmResults = realm.where(apps.savvisingh.nanakshahicalendar.classes.Event.class).equalTo("day", day)
-                        .equalTo("month", month+1).equalTo("year", year).findAll();
+                        .equalTo("month", month).equalTo("year", year).findAll();
 
                 if(realmResults.size()>0){
                     createDialog(realmResults);
