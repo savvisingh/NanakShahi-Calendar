@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "519558638668",
+    "firebase_url": "https://nanakshahicalendar.firebaseio.com",
+    "project_id": "firebase-nanakshahicalendar",
+    "storage_bucket": "firebase-nanakshahicalendar.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:519558638668:android:d74ccecc9163009f",
+        "android_client_info": {
+          "package_name": "apps.savvisingh.nanakshahicalendar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "519558638668-qkfmkra71e3vaj5tot1do6ndjlq76eqp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "apps.savvisingh.nanakshahicalendar",
+            "certificate_hash": "37F84C923B4AEF449A8329963707C378D3CDC274"
+          }
+        },
+        {
+          "client_id": "519558638668-m70g40g6tn1il05326c90nmpl55r9802.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZTc1yhCctGzAWFMbQbs3QkImSp5XUoOI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "519558638668-m70g40g6tn1il05326c90nmpl55r9802.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

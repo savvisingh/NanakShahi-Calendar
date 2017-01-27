@@ -1,4 +1,4 @@
-package apps.savvisingh.nanakshahicalendar;
+package apps.savvisingh.nanakshahicalendar.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,17 +8,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-import java.util.List;
+import apps.savvisingh.nanakshahicalendar.R;
+import apps.savvisingh.nanakshahicalendar.classes.Event;
+import io.realm.RealmResults;
 
 /**
  * Created by Günhan on 28.02.2016.
  */
 public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.ItemHolder> {
-    private List<SampleModel> list;
     private OnItemClickListener onItemClickListener;
+    private RealmResults<Event> results;
 
-    public BottomSheetAdapter(List<SampleModel> list) {
-        this.list = list;
+    public BottomSheetAdapter(RealmResults<Event> results) {
+        this.results = results;
     }
 
     @Override
@@ -29,12 +31,12 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
 
     @Override
     public void onBindViewHolder(BottomSheetAdapter.ItemHolder holder, int position) {
-        holder.bind(list.get(position));
+        holder.bind(results.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return results.size();
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -64,8 +66,8 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
             textView = (TextView) itemView.findViewById(R.id.textView);
         }
 
-        public void bind(SampleModel item) {
-            textView.setText(item.getTitleId());
+        public void bind(Event item) {
+            textView.setText(item.getTitle());
         }
 
         @Override

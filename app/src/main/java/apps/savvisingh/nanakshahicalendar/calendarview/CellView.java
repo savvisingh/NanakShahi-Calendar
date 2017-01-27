@@ -1,4 +1,4 @@
-package apps.savvisingh.nanakshahicalendar;
+package apps.savvisingh.nanakshahicalendar.calendarview;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -11,6 +11,8 @@ import com.p_v.flexiblecalendar.view.BaseCellView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import apps.savvisingh.nanakshahicalendar.R;
 
 /**
  * @author p-v

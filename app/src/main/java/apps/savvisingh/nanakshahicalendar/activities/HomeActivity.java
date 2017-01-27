@@ -1,11 +1,11 @@
-package apps.savvisingh.nanakshahicalendar;
+package apps.savvisingh.nanakshahicalendar.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -24,16 +24,34 @@ import com.p_v.flexiblecalendar.FlexibleCalendarView;
 import com.p_v.flexiblecalendar.entity.Event;
 import com.p_v.flexiblecalendar.view.BaseCellView;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import apps.savvisingh.nanakshahicalendar.adapter.BottomSheetAdapter;
+import apps.savvisingh.nanakshahicalendar.R;
+import apps.savvisingh.nanakshahicalendar.calendarview.CustomEvent;
+import io.realm.Realm;
+import io.realm.RealmResults;
+
+import static apps.savvisingh.nanakshahicalendar.util.AppConstants.GURUPURAB;
+import static apps.savvisingh.nanakshahicalendar.util.AppConstants.HISTORICAL_DAYS;
+import static apps.savvisingh.nanakshahicalendar.util.AppConstants.MASYA;
+import static apps.savvisingh.nanakshahicalendar.util.AppConstants.PURANMASHI;
+import static apps.savvisingh.nanakshahicalendar.util.AppConstants.SAGRANDH;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private TextView monthTextView;
     private BottomSheetDialog dialog;
+
+
+    private Realm realm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +70,17 @@ public class HomeActivity extends AppCompatActivity
         InitNavigationDrawer();
         InitCalendarView();
 
+        Calendar cal = Calendar.getInstance();
+
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        String formattedDate = df.format(cal.getTime());
+
+        getSupportActionBar().setTitle(formattedDate);
+
+        realm = Realm.getDefaultInstance();
+
+        Log.d("events", String.valueOf(realm.where(apps.savvisingh.nanakshahicalendar.classes.Event.class).count()));
+
 
     }
 
@@ -68,6 +97,9 @@ public class HomeActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+
     }
 
     private void InitCalendarView(){
@@ -82,7 +114,8 @@ public class HomeActivity extends AppCompatActivity
         Calendar cal = Calendar.getInstance();
         cal.set(calendarView.getSelectedDateItem().getYear(), calendarView.getSelectedDateItem().getMonth(), 1);
         monthTextView.setText(cal.getDisplayName(Calendar.MONTH,
-                Calendar.LONG, Locale.ENGLISH) + " " + calendarView.getSelectedDateItem().getYear());
+                Calendar.LONG, Locale.ENGLISH) );
+
 
         leftArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,8 +135,15 @@ public class HomeActivity extends AppCompatActivity
             public void onMonthChange(int year, int month, @FlexibleCalendarView.Direction int direction) {
                 Calendar cal = Calendar.getInstance();
                 cal.set(year, month, 1);
+
+                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+                String formattedDate = df.format(cal.getTime());
+
+                getSupportActionBar().setTitle(formattedDate);
+
+
                 monthTextView.setText(cal.getDisplayName(Calendar.MONTH,
-                        Calendar.LONG, Locale.ENGLISH) + " " + year);
+                        Calendar.LONG, Locale.ENGLISH));
 
             }
         });
@@ -147,33 +187,80 @@ public class HomeActivity extends AppCompatActivity
         calendarView.setEventDataProvider(new FlexibleCalendarView.EventDataProvider() {
             @Override
             public List<? extends Event> getEventsForTheDay(int year, int month, int day) {
-                if(year==2017 && month == 0 && day == 25){
-                    List<CustomEvent> colorLst1 = new ArrayList<>();
-                    colorLst1.add(new CustomEvent(android.R.color.holo_green_dark));
-                    colorLst1.add(new CustomEvent(android.R.color.holo_blue_light));
-                    colorLst1.add(new CustomEvent(android.R.color.holo_purple));
-                    return colorLst1;
+
+                List<CustomEvent> colorLst = new ArrayList<>();
+
+                RealmResults<apps.savvisingh.nanakshahicalendar.classes.Event> results = realm.where(apps.savvisingh.nanakshahicalendar.classes.Event.class).equalTo("day", day)
+                        .equalTo("month", month+1).equalTo("year", year).findAll();
+
+                if(results.size()>0){
+                    Log.d("Events", results.size() +" ");
+                    for(apps.savvisingh.nanakshahicalendar.classes.Event event:results){
+                        switch (event.getEvent_type()) {
+                            case MASYA:
+                                colorLst.add(new CustomEvent(android.R.color.black));
+                                break;
+                            case SAGRANDH:
+                                colorLst.add(new CustomEvent(android.R.color.holo_red_dark));
+                                break;
+                            case GURUPURAB:
+                                colorLst.add(new CustomEvent(android.R.color.holo_red_dark));
+                                break;
+                            case PURANMASHI:
+                                colorLst.add(new CustomEvent(android.R.color.holo_blue_dark));
+                                break;
+                            case HISTORICAL_DAYS:
+                                colorLst.add(new CustomEvent(android.R.color.holo_blue_dark));
+                                break;
+                        }
+                    }
                 }
-                if(year==2017 && month == 0 && day == 8){
-                    List<CustomEvent> colorLst1 = new ArrayList<>();
-                    colorLst1.add(new CustomEvent(android.R.color.holo_green_dark));
-                    colorLst1.add(new CustomEvent(android.R.color.holo_blue_light));
-                    colorLst1.add(new CustomEvent(android.R.color.holo_purple));
-                    return colorLst1;
-                }
-                if(year==2017 && month == 0 && day == 5){
-                    List<CustomEvent> colorLst1 = new ArrayList<>();
-                    colorLst1.add(new CustomEvent(android.R.color.holo_purple));
-                    return colorLst1;
-                }
-                return null;
+
+
+                return colorLst;
             }
+
+
         });
 
         calendarView.setOnDateClickListener(new FlexibleCalendarView.OnDateClickListener() {
             @Override
             public void onDateClick(int year, int month, int day) {
-                createDialog();
+
+                String dateStr = "";
+                if(day>9){
+                    dateStr+=day;
+                }else {
+                    dateStr+= "0" + day;
+                }
+
+                if(month+1 >9){
+                    dateStr += "/" + month+1;
+                }else {
+                    dateStr += "/" + "0" + month+1;
+                }
+
+                dateStr+="/"+year;
+
+                SimpleDateFormat curFormater = new SimpleDateFormat("dd/MM/yyyy");
+                Date dateObj = null;
+                try {
+                    dateObj = curFormater.parse(dateStr);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                SimpleDateFormat postFormater = new SimpleDateFormat("dd-MMM-yyyy");
+
+                String newDateStr = postFormater.format(dateObj);
+                getSupportActionBar().setTitle(newDateStr);
+
+                RealmResults<apps.savvisingh.nanakshahicalendar.classes.Event> realmResults = realm.where(apps.savvisingh.nanakshahicalendar.classes.Event.class).equalTo("day", day)
+                        .equalTo("month", month+1).equalTo("year", year).findAll();
+
+                if(realmResults.size()>0){
+                    createDialog(realmResults);
+                }
+
             }
         });
     }
@@ -188,22 +275,20 @@ public class HomeActivity extends AppCompatActivity
         return false;
     }
 
-    private void createDialog() {
+    private void createDialog(final RealmResults<apps.savvisingh.nanakshahicalendar.classes.Event> results) {
         if (dismissDialog()) {
             return;
         }
 
-        List<SampleModel> list = new ArrayList<>();
-        list.add(new SampleModel(R.string.share, R.mipmap.ic_launcher));
-        list.add(new SampleModel(R.string.upload, R.mipmap.ic_launcher));
-        list.add(new SampleModel(R.string.copy, R.mipmap.ic_launcher));
-        list.add(new SampleModel(R.string.print, R.mipmap.ic_launcher));
 
-        BottomSheetAdapter adapter = new BottomSheetAdapter(list);
+        BottomSheetAdapter adapter = new BottomSheetAdapter(results);
         adapter.setOnItemClickListener(new BottomSheetAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BottomSheetAdapter.ItemHolder item, int position) {
-                //dismissDialog();
+                dismissDialog();
+                Intent intent = new Intent(HomeActivity.this, EventActivity.class);
+                intent.putExtra("event_id", results.get(position).getId());
+                startActivity(intent);
             }
         });
 

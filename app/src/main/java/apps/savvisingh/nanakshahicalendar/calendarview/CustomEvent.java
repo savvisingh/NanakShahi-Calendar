@@ -1,4 +1,4 @@
-package apps.savvisingh.nanakshahicalendar;
+package apps.savvisingh.nanakshahicalendar.calendarview;
 
 import com.p_v.flexiblecalendar.entity.Event;
 
