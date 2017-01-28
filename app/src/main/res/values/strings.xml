@@ -15,6 +15,10 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_event">EventActivity</string>
+
+    <string name="search_string">Search</string>
+    <string name="search_hint">Search</string>
+
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -104,4 +108,5 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="title_activity_search_results">SearchResultsActivity</string>
 </resources>
