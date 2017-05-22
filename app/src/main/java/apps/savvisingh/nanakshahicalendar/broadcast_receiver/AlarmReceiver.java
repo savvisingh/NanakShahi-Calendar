@@ -12,7 +12,7 @@ import android.util.Log;
 
 import apps.savvisingh.nanakshahicalendar.R;
 import apps.savvisingh.nanakshahicalendar.activities.HomeActivity;
-import apps.savvisingh.nanakshahicalendar.classes.Event;
+import apps.savvisingh.nanakshahicalendar.model.Event;
 import apps.savvisingh.nanakshahicalendar.service.AlarmService;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -49,8 +49,9 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                     NotificationCompat.Builder mBuilder =
                             new NotificationCompat.Builder(context)
-                                    .setSmallIcon(android.R.drawable.ic_menu_my_calendar)
-                                    .setLargeIcon(largeIcon)
+                                    .setSmallIcon(R.drawable.ic_khanda)
+                                    .setTicker("Waheguru")
+                                    .setStyle(new NotificationCompat.BigTextStyle().bigText(event.getDescription()))
                                     .setContentTitle(event.getTitle())
                                     .setContentText(event.getDescription())
                                     .setContentIntent(myIntent);

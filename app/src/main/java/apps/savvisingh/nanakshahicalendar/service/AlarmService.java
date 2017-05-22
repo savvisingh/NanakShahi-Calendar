@@ -10,7 +10,7 @@ import android.util.Log;
 import java.util.Calendar;
 
 import apps.savvisingh.nanakshahicalendar.broadcast_receiver.AlarmReceiver;
-import apps.savvisingh.nanakshahicalendar.classes.Event;
+import apps.savvisingh.nanakshahicalendar.model.Event;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -93,10 +93,6 @@ public class AlarmService extends IntentService {
             Log.d("Alarm time", calobj.getTime().toString() + " ");
             Log.d("Alarm time", calobj.getTimeInMillis() + " ");
 
-
-//            for (Event event: results){
-//                Log.d("Events", event.getDay() + " " + event.getMonth() + " " + event.getYear() +" ");
-//            }
 
 
             alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);

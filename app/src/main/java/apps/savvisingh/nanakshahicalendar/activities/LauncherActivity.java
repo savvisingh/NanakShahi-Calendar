@@ -1,14 +1,9 @@
 package apps.savvisingh.nanakshahicalendar.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -17,7 +12,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import apps.savvisingh.nanakshahicalendar.R;
-import apps.savvisingh.nanakshahicalendar.classes.Event;
+import apps.savvisingh.nanakshahicalendar.model.Event;
 import io.realm.Realm;
 
 /**
@@ -71,7 +66,7 @@ public class LauncherActivity extends AppCompatActivity {
                                 public void execute(Realm realm) {
                                     Event event = realm.createObject(Event.class, item.child("id").getValue());
                                     event.setDay(((Long) item.child("day").getValue()).intValue());
-                                    event.setMonth(((Long) item.child("month").getValue()).intValue());
+                                    event.setMonth(((Long) item.child("month").getValue()).intValue() - 1 );
                                     event.setYear(((Long) item.child("year").getValue()).intValue());
                                     event.setTitle((String) item.child("title").getValue());
                                     event.setDescription((String) item.child("description").getValue());

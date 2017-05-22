@@ -8,10 +8,31 @@
     tools:context="apps.savvisingh.nanakshahicalendar.activities.EventActivity"
     tools:showIn="@layout/activity_event">
 
-    <TextView
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:textSize="20sp"
+            android:text="Event Title" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:textSize="16sp"
+            android:text="Event Description" />
+
+    </LinearLayout>
+
+
+
+
+
+
 
 </android.support.v4.widget.NestedScrollView>

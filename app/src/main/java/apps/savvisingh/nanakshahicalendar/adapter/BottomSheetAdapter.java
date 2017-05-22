@@ -1,5 +1,7 @@
 package apps.savvisingh.nanakshahicalendar.adapter;
 
+import android.graphics.drawable.Drawable;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +11,15 @@ import android.widget.TextView;
 
 
 import apps.savvisingh.nanakshahicalendar.R;
-import apps.savvisingh.nanakshahicalendar.classes.Event;
+import apps.savvisingh.nanakshahicalendar.model.Event;
 import io.realm.RealmResults;
+
+import static apps.savvisingh.nanakshahicalendar.util.AppConstants.GOVERNMENT_HOLIDAY;
+import static apps.savvisingh.nanakshahicalendar.util.AppConstants.GURUPURAB;
+import static apps.savvisingh.nanakshahicalendar.util.AppConstants.HISTORICAL_DAYS;
+import static apps.savvisingh.nanakshahicalendar.util.AppConstants.MASYA;
+import static apps.savvisingh.nanakshahicalendar.util.AppConstants.PURANMASHI;
+import static apps.savvisingh.nanakshahicalendar.util.AppConstants.SAGRANDH;
 
 /**
  * Created by Günhan on 28.02.2016.
@@ -67,7 +76,23 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
         }
 
         public void bind(Event item) {
-            textView.setText(item.getTitle());
+            textView.setText(item.getDescription());
+            switch (item.getEvent_type()){
+                case MASYA: imageView.setImageResource(R.drawable.khanda_black);
+                    break;
+                case SAGRANDH: imageView.setImageResource(R.drawable.khanda_violet);
+                    break;
+                case GURUPURAB: imageView.setImageResource(R.drawable.khanda_red);
+                    break;
+                case PURANMASHI: imageView.setImageResource(R.drawable.khanda_yellow);
+                    break;
+                case HISTORICAL_DAYS: imageView.setImageResource(R.drawable.khanda_blue);
+                    break;
+                case GOVERNMENT_HOLIDAY: imageView.setImageResource(R.drawable.khanda_blue);
+                    break;
+
+
+            }
         }
 
         @Override

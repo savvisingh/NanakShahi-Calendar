@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,11 +29,9 @@ import com.p_v.flexiblecalendar.FlexibleCalendarView;
 import com.p_v.flexiblecalendar.entity.Event;
 import com.p_v.flexiblecalendar.view.BaseCellView;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -43,14 +42,14 @@ import apps.savvisingh.nanakshahicalendar.service.AlarmService;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
+import static apps.savvisingh.nanakshahicalendar.util.AppConstants.GOVERNMENT_HOLIDAY;
 import static apps.savvisingh.nanakshahicalendar.util.AppConstants.GURUPURAB;
 import static apps.savvisingh.nanakshahicalendar.util.AppConstants.HISTORICAL_DAYS;
 import static apps.savvisingh.nanakshahicalendar.util.AppConstants.MASYA;
 import static apps.savvisingh.nanakshahicalendar.util.AppConstants.PURANMASHI;
 import static apps.savvisingh.nanakshahicalendar.util.AppConstants.SAGRANDH;
 
-public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends AppCompatActivity {
 
     private TextView monthTextView;
     private BottomSheetDialog dialog;
@@ -84,7 +83,7 @@ public class HomeActivity extends AppCompatActivity
 
         realm = Realm.getDefaultInstance();
 
-        Log.d("events", String.valueOf(realm.where(apps.savvisingh.nanakshahicalendar.classes.Event.class).count()));
+        Log.d("events", String.valueOf(realm.where(apps.savvisingh.nanakshahicalendar.model.Event.class).count()));
 
         AlarmService.setAlarm(this);
 
@@ -95,15 +94,6 @@ public class HomeActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
 
 
     }
@@ -117,7 +107,7 @@ public class HomeActivity extends AppCompatActivity
 
         monthTextView = (TextView)findViewById(R.id.month_text_view);
 
-        Calendar cal = Calendar.getInstance();
+        final Calendar cal = Calendar.getInstance();
         cal.set(calendarView.getSelectedDateItem().getYear(), calendarView.getSelectedDateItem().getMonth(), 1);
         monthTextView.setText(cal.getDisplayName(Calendar.MONTH,
                 Calendar.LONG, Locale.ENGLISH) );
@@ -196,27 +186,30 @@ public class HomeActivity extends AppCompatActivity
 
                 List<CustomEvent> colorLst = new ArrayList<>();
 
-                RealmResults<apps.savvisingh.nanakshahicalendar.classes.Event> results = realm.where(apps.savvisingh.nanakshahicalendar.classes.Event.class).equalTo("day", day)
+                RealmResults<apps.savvisingh.nanakshahicalendar.model.Event> results = realm.where(apps.savvisingh.nanakshahicalendar.model.Event.class).equalTo("day", day)
                         .equalTo("month", month).equalTo("year", year).findAll();
 
                 if(results.size()>0){
                     Log.d("Events", results.size() +" ");
-                    for(apps.savvisingh.nanakshahicalendar.classes.Event event:results){
+                    for(apps.savvisingh.nanakshahicalendar.model.Event event:results){
                         switch (event.getEvent_type()) {
                             case MASYA:
                                 colorLst.add(new CustomEvent(android.R.color.black));
                                 break;
                             case SAGRANDH:
-                                colorLst.add(new CustomEvent(android.R.color.holo_red_dark));
+                                colorLst.add(new CustomEvent(android.R.color.holo_purple));
                                 break;
                             case GURUPURAB:
                                 colorLst.add(new CustomEvent(android.R.color.holo_red_dark));
                                 break;
                             case PURANMASHI:
-                                colorLst.add(new CustomEvent(android.R.color.holo_blue_dark));
+                                colorLst.add(new CustomEvent(android.R.color.holo_orange_light));
                                 break;
                             case HISTORICAL_DAYS:
                                 colorLst.add(new CustomEvent(android.R.color.holo_blue_dark));
+                                break;
+                            case GOVERNMENT_HOLIDAY:
+                                colorLst.add(new CustomEvent(android.R.color.holo_orange_dark));
                                 break;
                         }
                     }
@@ -242,7 +235,7 @@ public class HomeActivity extends AppCompatActivity
 
                 getSupportActionBar().setTitle(formattedDate);
 
-                RealmResults<apps.savvisingh.nanakshahicalendar.classes.Event> realmResults = realm.where(apps.savvisingh.nanakshahicalendar.classes.Event.class).equalTo("day", day)
+                RealmResults<apps.savvisingh.nanakshahicalendar.model.Event> realmResults = realm.where(apps.savvisingh.nanakshahicalendar.model.Event.class).equalTo("day", day)
                         .equalTo("month", month).equalTo("year", year).findAll();
 
                 if(realmResults.size()>0){
@@ -263,7 +256,7 @@ public class HomeActivity extends AppCompatActivity
         return false;
     }
 
-    private void createDialog(final RealmResults<apps.savvisingh.nanakshahicalendar.classes.Event> results) {
+    private void createDialog(final RealmResults<apps.savvisingh.nanakshahicalendar.model.Event> results) {
         if (dismissDialog()) {
             return;
         }
@@ -276,7 +269,7 @@ public class HomeActivity extends AppCompatActivity
                 dismissDialog();
                 Intent intent = new Intent(HomeActivity.this, EventActivity.class);
                 intent.putExtra("event_id", results.get(position).getId());
-                startActivity(intent);
+                //startActivity(intent);
             }
         });
 
@@ -294,12 +287,7 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
             super.onBackPressed();
-        }
     }
 
     @Override
@@ -324,35 +312,14 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_about_us) {
+
+            Intent intent = new Intent(HomeActivity.this, AboutDeveloper.class);
+            startActivity(intent);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 }

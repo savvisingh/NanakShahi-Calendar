@@ -11,7 +11,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <provider
             android:name=".util.MySuggestionProvider"
             android:authorities="apps.savvisingh.nanakshahicalendar.util.MySuggestionProvider" />
@@ -20,11 +19,9 @@
             android:name=".activities.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar">
-
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".activities.SearchResultsActivity" />
-
         </activity>
         <activity
             android:name=".activities.LauncherActivity"
@@ -68,12 +65,16 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="apps.savvisingh.nanakshahicalendar.activities.HomeActivity" />
+
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
-            <meta-data android:name="android.app.searchable"
-                android:resource="@xml/searchable"/>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
+        <activity android:name=".activities.AboutDeveloper"></activity>
     </application>
 
 </manifest>
