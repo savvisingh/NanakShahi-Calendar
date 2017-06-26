@@ -51,7 +51,7 @@ public class LauncherActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }else {
-            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             DatabaseReference mFirebaseDatabase = FirebaseDatabase.getInstance().getReference();
 
             mFirebaseDatabase.child("Events").orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {

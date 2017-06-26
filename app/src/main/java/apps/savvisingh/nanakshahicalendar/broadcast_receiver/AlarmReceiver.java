@@ -28,7 +28,14 @@ public class AlarmReceiver extends BroadcastReceiver {
         // TODO: This method is called when the BroadcastReceiver is receiving
         // an Intent broadcast.
 
-        realm = Realm.getDefaultInstance();
+
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (IllegalStateException fuckYouTooAndroid) {
+            Realm.init(context.getApplicationContext());
+            realm = Realm.getDefaultInstance();
+        }
+
 
         Log.d("AlarmReceiver", "onReceive");
 
