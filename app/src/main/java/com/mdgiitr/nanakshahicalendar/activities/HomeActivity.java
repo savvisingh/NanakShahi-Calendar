@@ -1,10 +1,9 @@
-package apps.savvisingh.nanakshahicalendar.activities;
+package com.savvisingh.nanakshahicalendar.activities;
 
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,10 +12,6 @@ import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -28,6 +23,10 @@ import android.widget.TextView;
 import com.p_v.flexiblecalendar.FlexibleCalendarView;
 import com.p_v.flexiblecalendar.entity.Event;
 import com.p_v.flexiblecalendar.view.BaseCellView;
+import com.savvisingh.nanakshahicalendar.adapter.BottomSheetAdapter;
+import com.savvisingh.nanakshahicalendar.calendarview.CustomEvent;
+import com.savvisingh.nanakshahicalendar.service.AlarmService;
+import com.savvisingh.nanakshahicalendar.util.AppConstants;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,19 +34,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
-import apps.savvisingh.nanakshahicalendar.adapter.BottomSheetAdapter;
 import apps.savvisingh.nanakshahicalendar.R;
-import apps.savvisingh.nanakshahicalendar.calendarview.CustomEvent;
-import apps.savvisingh.nanakshahicalendar.service.AlarmService;
 import io.realm.Realm;
 import io.realm.RealmResults;
-
-import static apps.savvisingh.nanakshahicalendar.util.AppConstants.GOVERNMENT_HOLIDAY;
-import static apps.savvisingh.nanakshahicalendar.util.AppConstants.GURUPURAB;
-import static apps.savvisingh.nanakshahicalendar.util.AppConstants.HISTORICAL_DAYS;
-import static apps.savvisingh.nanakshahicalendar.util.AppConstants.MASYA;
-import static apps.savvisingh.nanakshahicalendar.util.AppConstants.PURANMASHI;
-import static apps.savvisingh.nanakshahicalendar.util.AppConstants.SAGRANDH;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -83,7 +72,7 @@ public class HomeActivity extends AppCompatActivity {
 
         realm = Realm.getDefaultInstance();
 
-        Log.d("events", String.valueOf(realm.where(apps.savvisingh.nanakshahicalendar.model.Event.class).count()));
+        Log.d("events", String.valueOf(realm.where(com.savvisingh.nanakshahicalendar.model.Event.class).count()));
 
         AlarmService.setAlarm(this);
 
@@ -186,29 +175,29 @@ public class HomeActivity extends AppCompatActivity {
 
                 List<CustomEvent> colorLst = new ArrayList<>();
 
-                RealmResults<apps.savvisingh.nanakshahicalendar.model.Event> results = realm.where(apps.savvisingh.nanakshahicalendar.model.Event.class).equalTo("day", day)
+                RealmResults<com.savvisingh.nanakshahicalendar.model.Event> results = realm.where(com.savvisingh.nanakshahicalendar.model.Event.class).equalTo("day", day)
                         .equalTo("month", month).equalTo("year", year).findAll();
 
                 if(results.size()>0){
                     Log.d("Events", results.size() +" ");
-                    for(apps.savvisingh.nanakshahicalendar.model.Event event:results){
+                    for(com.savvisingh.nanakshahicalendar.model.Event event:results){
                         switch (event.getEvent_type()) {
-                            case MASYA:
+                            case AppConstants.MASYA:
                                 colorLst.add(new CustomEvent(android.R.color.black));
                                 break;
-                            case SAGRANDH:
+                            case AppConstants.SAGRANDH:
                                 colorLst.add(new CustomEvent(android.R.color.holo_purple));
                                 break;
-                            case GURUPURAB:
+                            case AppConstants.GURUPURAB:
                                 colorLst.add(new CustomEvent(android.R.color.holo_red_dark));
                                 break;
-                            case PURANMASHI:
+                            case AppConstants.PURANMASHI:
                                 colorLst.add(new CustomEvent(android.R.color.holo_orange_light));
                                 break;
-                            case HISTORICAL_DAYS:
+                            case AppConstants.HISTORICAL_DAYS:
                                 colorLst.add(new CustomEvent(android.R.color.holo_blue_dark));
                                 break;
-                            case GOVERNMENT_HOLIDAY:
+                            case AppConstants.GOVERNMENT_HOLIDAY:
                                 colorLst.add(new CustomEvent(android.R.color.holo_orange_dark));
                                 break;
                         }
@@ -235,7 +224,7 @@ public class HomeActivity extends AppCompatActivity {
 
                 getSupportActionBar().setTitle(formattedDate);
 
-                RealmResults<apps.savvisingh.nanakshahicalendar.model.Event> realmResults = realm.where(apps.savvisingh.nanakshahicalendar.model.Event.class).equalTo("day", day)
+                RealmResults<com.savvisingh.nanakshahicalendar.model.Event> realmResults = realm.where(com.savvisingh.nanakshahicalendar.model.Event.class).equalTo("day", day)
                         .equalTo("month", month).equalTo("year", year).findAll();
 
                 if(realmResults.size()>0){
@@ -256,7 +245,7 @@ public class HomeActivity extends AppCompatActivity {
         return false;
     }
 
-    private void createDialog(final RealmResults<apps.savvisingh.nanakshahicalendar.model.Event> results) {
+    private void createDialog(final RealmResults<com.savvisingh.nanakshahicalendar.model.Event> results) {
         if (dismissDialog()) {
             return;
         }

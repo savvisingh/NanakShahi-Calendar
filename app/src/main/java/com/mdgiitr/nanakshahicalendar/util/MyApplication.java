@@ -1,4 +1,4 @@
-package apps.savvisingh.nanakshahicalendar.util;
+package com.savvisingh.nanakshahicalendar.util;
 
 import android.app.Application;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package apps.savvisingh.nanakshahicalendar.model;
+package com.savvisingh.nanakshahicalendar.model;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 

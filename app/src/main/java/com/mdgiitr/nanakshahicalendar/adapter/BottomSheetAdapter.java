@@ -1,7 +1,5 @@
-package apps.savvisingh.nanakshahicalendar.adapter;
+package com.savvisingh.nanakshahicalendar.adapter;
 
-import android.graphics.drawable.Drawable;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,15 +9,15 @@ import android.widget.TextView;
 
 
 import apps.savvisingh.nanakshahicalendar.R;
-import apps.savvisingh.nanakshahicalendar.model.Event;
+import com.savvisingh.nanakshahicalendar.model.Event;
 import io.realm.RealmResults;
 
-import static apps.savvisingh.nanakshahicalendar.util.AppConstants.GOVERNMENT_HOLIDAY;
-import static apps.savvisingh.nanakshahicalendar.util.AppConstants.GURUPURAB;
-import static apps.savvisingh.nanakshahicalendar.util.AppConstants.HISTORICAL_DAYS;
-import static apps.savvisingh.nanakshahicalendar.util.AppConstants.MASYA;
-import static apps.savvisingh.nanakshahicalendar.util.AppConstants.PURANMASHI;
-import static apps.savvisingh.nanakshahicalendar.util.AppConstants.SAGRANDH;
+import static com.savvisingh.nanakshahicalendar.util.AppConstants.GOVERNMENT_HOLIDAY;
+import static com.savvisingh.nanakshahicalendar.util.AppConstants.GURUPURAB;
+import static com.savvisingh.nanakshahicalendar.util.AppConstants.HISTORICAL_DAYS;
+import static com.savvisingh.nanakshahicalendar.util.AppConstants.MASYA;
+import static com.savvisingh.nanakshahicalendar.util.AppConstants.PURANMASHI;
+import static com.savvisingh.nanakshahicalendar.util.AppConstants.SAGRANDH;
 
 /**
  * Created by Günhan on 28.02.2016.

@@ -1,4 +1,4 @@
-package apps.savvisingh.nanakshahicalendar.broadcast_receiver;
+package com.savvisingh.nanakshahicalendar.broadcast_receiver;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,10 +10,11 @@ import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.savvisingh.nanakshahicalendar.model.Event;
+
 import apps.savvisingh.nanakshahicalendar.R;
-import apps.savvisingh.nanakshahicalendar.activities.HomeActivity;
-import apps.savvisingh.nanakshahicalendar.model.Event;
-import apps.savvisingh.nanakshahicalendar.service.AlarmService;
+import com.savvisingh.nanakshahicalendar.activities.HomeActivity;
+import com.savvisingh.nanakshahicalendar.service.AlarmService;
 import io.realm.Realm;
 import io.realm.RealmResults;
 

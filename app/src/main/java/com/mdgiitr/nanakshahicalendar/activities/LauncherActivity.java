@@ -1,4 +1,4 @@
-package apps.savvisingh.nanakshahicalendar.activities;
+package com.savvisingh.nanakshahicalendar.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +12,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import apps.savvisingh.nanakshahicalendar.R;
-import apps.savvisingh.nanakshahicalendar.model.Event;
+import com.savvisingh.nanakshahicalendar.model.Event;
 import io.realm.Realm;
 
 /**

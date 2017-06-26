@@ -1,10 +1,10 @@
-package apps.savvisingh.nanakshahicalendar.broadcast_receiver;
+package com.savvisingh.nanakshahicalendar.broadcast_receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import apps.savvisingh.nanakshahicalendar.service.AlarmService;
+import com.savvisingh.nanakshahicalendar.service.AlarmService;
 
 public class BootReceiver extends BroadcastReceiver {
     public BootReceiver() {
