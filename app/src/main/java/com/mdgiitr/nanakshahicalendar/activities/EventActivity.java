@@ -1,4 +1,4 @@
-package com.savvisingh.nanakshahicalendar.activities;
+package com.mdgiitr.nanakshahicalendar.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;

@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/tensikhgurus"
     android:fitsSystemWindows="true"
-    tools:context="apps.savvisingh.nanakshahicalendar.activities.LauncherActivity">
+    tools:context="apps.savvisingh.nanakshahicalendar.com.savvisingh.nanakshahicalendar.activities.LauncherActivity">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,

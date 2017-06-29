@@ -1,4 +1,4 @@
-package com.savvisingh.nanakshahicalendar.activities;
+package com.mdgiitr.nanakshahicalendar.activities;
 
 import android.app.SearchManager;
 import android.content.ComponentName;
@@ -20,13 +20,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.p_v.flexiblecalendar.FlexibleCalendarView;
 import com.p_v.flexiblecalendar.entity.Event;
 import com.p_v.flexiblecalendar.view.BaseCellView;
-import com.savvisingh.nanakshahicalendar.adapter.BottomSheetAdapter;
-import com.savvisingh.nanakshahicalendar.calendarview.CustomEvent;
-import com.savvisingh.nanakshahicalendar.service.AlarmService;
-import com.savvisingh.nanakshahicalendar.util.AppConstants;
+import com.mdgiitr.nanakshahicalendar.adapter.BottomSheetAdapter;
+import com.mdgiitr.nanakshahicalendar.calendarview.CustomEvent;
+import com.mdgiitr.nanakshahicalendar.service.AlarmService;
+import com.mdgiitr.nanakshahicalendar.util.AppConstants;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,6 +45,8 @@ public class HomeActivity extends AppCompatActivity {
     private TextView monthTextView;
     private BottomSheetDialog dialog;
 
+    private AdView mAdView;
+
 
     private Realm realm;
     @Override
@@ -51,14 +55,11 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
 
         InitNavigationDrawer();
         InitCalendarView();
@@ -72,7 +73,7 @@ public class HomeActivity extends AppCompatActivity {
 
         realm = Realm.getDefaultInstance();
 
-        Log.d("events", String.valueOf(realm.where(com.savvisingh.nanakshahicalendar.model.Event.class).count()));
+        Log.d("events", String.valueOf(realm.where(com.mdgiitr.nanakshahicalendar.model.Event.class).count()));
 
         AlarmService.setAlarm(this);
 
@@ -175,12 +176,12 @@ public class HomeActivity extends AppCompatActivity {
 
                 List<CustomEvent> colorLst = new ArrayList<>();
 
-                RealmResults<com.savvisingh.nanakshahicalendar.model.Event> results = realm.where(com.savvisingh.nanakshahicalendar.model.Event.class).equalTo("day", day)
+                RealmResults<com.mdgiitr.nanakshahicalendar.model.Event> results = realm.where(com.mdgiitr.nanakshahicalendar.model.Event.class).equalTo("day", day)
                         .equalTo("month", month).equalTo("year", year).findAll();
 
                 if(results.size()>0){
                     Log.d("Events", results.size() +" ");
-                    for(com.savvisingh.nanakshahicalendar.model.Event event:results){
+                    for(com.mdgiitr.nanakshahicalendar.model.Event event:results){
                         switch (event.getEvent_type()) {
                             case AppConstants.MASYA:
                                 colorLst.add(new CustomEvent(android.R.color.black));
@@ -224,7 +225,7 @@ public class HomeActivity extends AppCompatActivity {
 
                 getSupportActionBar().setTitle(formattedDate);
 
-                RealmResults<com.savvisingh.nanakshahicalendar.model.Event> realmResults = realm.where(com.savvisingh.nanakshahicalendar.model.Event.class).equalTo("day", day)
+                RealmResults<com.mdgiitr.nanakshahicalendar.model.Event> realmResults = realm.where(com.mdgiitr.nanakshahicalendar.model.Event.class).equalTo("day", day)
                         .equalTo("month", month).equalTo("year", year).findAll();
 
                 if(realmResults.size()>0){
@@ -245,7 +246,7 @@ public class HomeActivity extends AppCompatActivity {
         return false;
     }
 
-    private void createDialog(final RealmResults<com.savvisingh.nanakshahicalendar.model.Event> results) {
+    private void createDialog(final RealmResults<com.mdgiitr.nanakshahicalendar.model.Event> results) {
         if (dismissDialog()) {
             return;
         }

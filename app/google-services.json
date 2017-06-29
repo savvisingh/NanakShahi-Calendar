@@ -19,7 +19,51 @@
           "client_type": 1,
           "android_info": {
             "package_name": "apps.savvisingh.nanakshahicalendar",
-            "certificate_hash": "37F84C923B4AEF449A8329963707C378D3CDC274"
+            "certificate_hash": "37f84c923b4aef449a8329963707c378d3cdc274"
+          }
+        },
+        {
+          "client_id": "519558638668-m70g40g6tn1il05326c90nmpl55r9802.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZTc1yhCctGzAWFMbQbs3QkImSp5XUoOI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "519558638668-m70g40g6tn1il05326c90nmpl55r9802.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:519558638668:android:cf6aa24720b27b47",
+        "android_client_info": {
+          "package_name": "com.mdgiitr.nanakshahicalendar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "519558638668-7gj0u6mhbmt8fqk6t9rkc803dv73aaq8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mdgiitr.nanakshahicalendar",
+            "certificate_hash": "37f84c923b4aef449a8329963707c378d3cdc274"
           }
         },
         {

@@ -1,4 +1,4 @@
-package com.savvisingh.nanakshahicalendar.broadcast_receiver;
+package com.mdgiitr.nanakshahicalendar.broadcast_receiver;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,11 +10,11 @@ import android.graphics.BitmapFactory;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.savvisingh.nanakshahicalendar.model.Event;
+import com.mdgiitr.nanakshahicalendar.model.Event;
 
 import apps.savvisingh.nanakshahicalendar.R;
-import com.savvisingh.nanakshahicalendar.activities.HomeActivity;
-import com.savvisingh.nanakshahicalendar.service.AlarmService;
+import com.mdgiitr.nanakshahicalendar.activities.HomeActivity;
+import com.mdgiitr.nanakshahicalendar.service.AlarmService;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -29,7 +29,12 @@ public class AlarmReceiver extends BroadcastReceiver {
         // TODO: This method is called when the BroadcastReceiver is receiving
         // an Intent broadcast.
 
-        realm = Realm.getDefaultInstance();
+        try {
+            realm = Realm.getDefaultInstance();
+        } catch (IllegalStateException fuckYouTooAndroid) {
+            Realm.init(context.getApplicationContext());
+            realm = Realm.getDefaultInstance();
+        }
 
         Log.d("AlarmReceiver", "onReceive");
 

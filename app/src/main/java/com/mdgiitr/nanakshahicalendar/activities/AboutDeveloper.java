@@ -1,4 +1,4 @@
-package com.savvisingh.nanakshahicalendar.activities;
+package com.mdgiitr.nanakshahicalendar.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

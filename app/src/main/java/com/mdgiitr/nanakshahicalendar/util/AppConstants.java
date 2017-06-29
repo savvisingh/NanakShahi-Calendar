@@ -1,4 +1,4 @@
-package com.savvisingh.nanakshahicalendar.util;
+package com.mdgiitr.nanakshahicalendar.util;
 
 /**
  * Created by SavviSingh on 27/01/17.

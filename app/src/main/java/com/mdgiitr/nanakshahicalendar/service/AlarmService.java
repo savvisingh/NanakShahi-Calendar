@@ -1,4 +1,4 @@
-package com.savvisingh.nanakshahicalendar.service;
+package com.mdgiitr.nanakshahicalendar.service;
 
 import android.app.AlarmManager;
 import android.app.IntentService;
@@ -7,8 +7,8 @@ import android.content.Intent;
 import android.content.Context;
 import android.util.Log;
 
-import com.savvisingh.nanakshahicalendar.broadcast_receiver.AlarmReceiver;
-import com.savvisingh.nanakshahicalendar.model.Event;
+import com.mdgiitr.nanakshahicalendar.broadcast_receiver.AlarmReceiver;
+import com.mdgiitr.nanakshahicalendar.model.Event;
 
 import java.util.Calendar;
 

@@ -1,4 +1,4 @@
-package com.savvisingh.nanakshahicalendar.adapter;
+package com.mdgiitr.nanakshahicalendar.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,15 +9,15 @@ import android.widget.TextView;
 
 
 import apps.savvisingh.nanakshahicalendar.R;
-import com.savvisingh.nanakshahicalendar.model.Event;
+import com.mdgiitr.nanakshahicalendar.model.Event;
 import io.realm.RealmResults;
 
-import static com.savvisingh.nanakshahicalendar.util.AppConstants.GOVERNMENT_HOLIDAY;
-import static com.savvisingh.nanakshahicalendar.util.AppConstants.GURUPURAB;
-import static com.savvisingh.nanakshahicalendar.util.AppConstants.HISTORICAL_DAYS;
-import static com.savvisingh.nanakshahicalendar.util.AppConstants.MASYA;
-import static com.savvisingh.nanakshahicalendar.util.AppConstants.PURANMASHI;
-import static com.savvisingh.nanakshahicalendar.util.AppConstants.SAGRANDH;
+import static com.mdgiitr.nanakshahicalendar.util.AppConstants.GOVERNMENT_HOLIDAY;
+import static com.mdgiitr.nanakshahicalendar.util.AppConstants.GURUPURAB;
+import static com.mdgiitr.nanakshahicalendar.util.AppConstants.HISTORICAL_DAYS;
+import static com.mdgiitr.nanakshahicalendar.util.AppConstants.MASYA;
+import static com.mdgiitr.nanakshahicalendar.util.AppConstants.PURANMASHI;
+import static com.mdgiitr.nanakshahicalendar.util.AppConstants.SAGRANDH;
 
 /**
  * Created by Günhan on 28.02.2016.

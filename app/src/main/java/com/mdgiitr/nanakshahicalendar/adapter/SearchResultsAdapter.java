@@ -1,4 +1,4 @@
-package com.savvisingh.nanakshahicalendar.adapter;
+package com.mdgiitr.nanakshahicalendar.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import apps.savvisingh.nanakshahicalendar.R;
-import com.savvisingh.nanakshahicalendar.model.Event;
+import com.mdgiitr.nanakshahicalendar.model.Event;
 import io.realm.RealmResults;
 
 /**

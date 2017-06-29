@@ -1,4 +1,4 @@
-package com.savvisingh.nanakshahicalendar.calendarview;
+package com.mdgiitr.nanakshahicalendar.calendarview;
 
 import android.content.Context;
 import android.graphics.Canvas;

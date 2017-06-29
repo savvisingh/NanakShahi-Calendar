@@ -1,4 +1,4 @@
-package com.savvisingh.nanakshahicalendar.activities;
+package com.mdgiitr.nanakshahicalendar.activities;
 
 import android.app.SearchManager;
 import android.content.Intent;
@@ -9,12 +9,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
-import com.savvisingh.nanakshahicalendar.adapter.SearchResultsAdapter;
-import com.savvisingh.nanakshahicalendar.model.Event;
+import com.mdgiitr.nanakshahicalendar.adapter.SearchResultsAdapter;
+import com.mdgiitr.nanakshahicalendar.model.Event;
 
 import apps.savvisingh.nanakshahicalendar.R;
 
-import com.savvisingh.nanakshahicalendar.util.MySuggestionProvider;
+import com.mdgiitr.nanakshahicalendar.util.MySuggestionProvider;
 import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
