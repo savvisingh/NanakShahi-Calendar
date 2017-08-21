@@ -43,13 +43,10 @@ public class LauncherActivity extends AppCompatActivity {
         setContentView(R.layout.activity_launcher);
         try {
             realm = Realm.getDefaultInstance();
-        } catch (IllegalStateException fuckYouTooAndroid) {
+        } catch (IllegalStateException e) {
             Realm.init(getApplicationContext());
             realm = Realm.getDefaultInstance();
         }
-
-        // Create the Realm instance
-        realm = Realm.getDefaultInstance();
 
         if(realm.where(Event.class).count()>0){
             Intent intent = new Intent(LauncherActivity.this, HomeActivity.class);
