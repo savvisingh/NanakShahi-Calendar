@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="apps.savvisingh.nanakshahicalendar.com.savvisingh.nanakshahicalendar.activities.EventActivity"
+    tools:context="com.mdgiitr.nanakshahicalendar.activities.EventActivity"
     tools:showIn="@layout/activity_event">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <TextView
@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:textSize="20sp"
+            android:id="@+id/event_title"
             android:text="Event Title" />
 
         <TextView
@@ -25,14 +26,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:textSize="16sp"
+            android:id="@+id/event_description"
             android:text="Event Description" />
 
     </LinearLayout>
-
-
-
-
-
-
 
 </android.support.v4.widget.NestedScrollView>

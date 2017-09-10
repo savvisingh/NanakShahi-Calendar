@@ -56,6 +56,16 @@
 
     </LinearLayout>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/addEvents"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:layout_above="@+id/adView"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_mode_edit_black_24dp"
+        android:layout_alignParentRight="true" />
+
     <com.google.android.gms.ads.AdView
         xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"
@@ -65,5 +75,7 @@
         android:layout_alignParentBottom="true"
         ads:adSize="BANNER"
         ads:adUnitId="ca-app-pub-2995010605730030/7862155107"/>
+
+
 
 </RelativeLayout>

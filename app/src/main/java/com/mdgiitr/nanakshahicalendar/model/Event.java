@@ -2,6 +2,9 @@ package com.mdgiitr.nanakshahicalendar.model;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -14,13 +17,12 @@ public class Event extends RealmObject{
     public String title;
     public  String description;
     public int event_type;
+    public Date date;
 
     @PrimaryKey
     public int id;
 
-    public Event(){
-
-    }
+    public Event(){}
 
     public Event(int day, int month, int year, String title, String description, int event_type) {
         this.day = day;
@@ -29,6 +31,11 @@ public class Event extends RealmObject{
         this.title = title;
         this.description = description;
         this.event_type = event_type;
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.YEAR, year);
+        this.date = calendar.getTime();
     }
 
     public int getDay() {
@@ -86,4 +93,13 @@ public class Event extends RealmObject{
     public void setId(int id) {
         this.id = id;
     }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
 }

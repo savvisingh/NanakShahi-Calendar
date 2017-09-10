@@ -21,8 +21,11 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
 
     RealmResults<Event> results;
 
-    public SearchResultsAdapter(RealmResults<Event> results){
+    private OnItemClickListener listener;
+
+    public SearchResultsAdapter(RealmResults<Event> results, OnItemClickListener listener){
         this.results = results;
+        this.listener = listener;
     }
 
     @Override
@@ -56,7 +59,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
         return results.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView eventTitle, eventDescription, eventDate;
 
@@ -65,6 +68,19 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
             eventTitle = (TextView) itemView.findViewById(R.id.event_title);
             eventDescription = (TextView) itemView.findViewById(R.id.event_description);
             eventDate = (TextView) itemView.findViewById(R.id.event_date);
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            if(listener!=null){
+                Event event = results.get(getAdapterPosition());
+                listener.onClick(event.getId());
+            }
+        }
+    }
+
+    public interface OnItemClickListener{
+        void onClick(int eventId);
     }
 }

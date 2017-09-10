@@ -76,7 +76,24 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity android:name="com.mdgiitr.nanakshahicalendar.activities.AboutDeveloper"></activity>
+        <activity android:name="com.mdgiitr.nanakshahicalendar.activities.AboutDeveloper" />
+
+        <service android:name="com.mdgiitr.nanakshahicalendar.service.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name="com.mdgiitr.nanakshahicalendar.service.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name="com.mdgiitr.nanakshahicalendar.activities.AddEditEvent"
+            android:label="@string/title_activity_add_edit_event"
+            android:exported="true"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

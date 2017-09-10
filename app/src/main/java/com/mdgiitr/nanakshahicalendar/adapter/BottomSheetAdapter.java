@@ -1,6 +1,7 @@
 package com.mdgiitr.nanakshahicalendar.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +62,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
     public static class ItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private BottomSheetAdapter adapter;
-        TextView textView;
+        TextView eventTitle, eventDescription;
         ImageView imageView;
 
         public ItemHolder(View itemView, BottomSheetAdapter parent) {
@@ -70,11 +71,16 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
             this.adapter = parent;
 
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
-            textView = (TextView) itemView.findViewById(R.id.textView);
+            eventTitle = (TextView) itemView.findViewById(R.id.event_title);
+            eventDescription = (TextView) itemView.findViewById(R.id.event_description);
         }
 
         public void bind(Event item) {
-            textView.setText(item.getDescription());
+            eventTitle.setText(item.getTitle());
+            if(TextUtils.isEmpty(item.getDescription()))
+                eventDescription.setVisibility(View.GONE);
+            else
+                eventDescription.setText(item.getDescription());
             switch (item.getEvent_type()){
                 case MASYA: imageView.setImageResource(R.drawable.khanda_black);
                     break;

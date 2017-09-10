@@ -5,15 +5,18 @@ import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 
 import com.mdgiitr.nanakshahicalendar.broadcast_receiver.AlarmReceiver;
 import com.mdgiitr.nanakshahicalendar.model.Event;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -69,14 +72,12 @@ public class AlarmService extends IntentService {
 
 
         Calendar c = Calendar.getInstance();
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        int month = c.get(Calendar.MONTH);
-        int year = c.get(Calendar.YEAR);
+        Date currentDate = c.getTime();
 
         realm = Realm.getDefaultInstance();
-        RealmResults<Event> results = realm.where(Event.class).greaterThan("day", day).greaterThanOrEqualTo("month", month).greaterThanOrEqualTo("year", year).findAllSorted("id");
 
-        Log.d("Events", results.size()+" ");
+        RealmResults<Event> results = realm.where(Event.class).greaterThan("date", currentDate).findAllSorted("date", Sort.ASCENDING);
+
 
         if(results.size()>0){
 
@@ -88,11 +89,11 @@ public class AlarmService extends IntentService {
             calobj.set(Calendar.YEAR, event.getYear());
             calobj.set(Calendar.MONTH, event.getMonth());
             calobj.set(Calendar.DAY_OF_MONTH, event.getDay());
-            calobj.set(Calendar.HOUR_OF_DAY, 00);
-            calobj.set(Calendar.MINUTE, 01);
+            calobj.set(Calendar.HOUR_OF_DAY, 0);
+            calobj.set(Calendar.MINUTE, 1);
 
-            Log.d("Alarm time", calobj.getTime().toString() + " ");
-            Log.d("Alarm time", calobj.getTimeInMillis() + " ");
+//            Log.d("Alarm time", calobj.getTime().toString() + " ");
+//            Log.d("Alarm time", calobj.getTimeInMillis() + " ");
 
 
 
@@ -102,7 +103,13 @@ public class AlarmService extends IntentService {
             intent.putExtra("event_id", event.getId());
             pendingIntent = PendingIntent.getBroadcast(this, event.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-            alarmManager.set(AlarmManager.RTC_WAKEUP, calobj.getTimeInMillis(), pendingIntent);
+            if (Build.VERSION.SDK_INT >= 23) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calobj.getTimeInMillis(), pendingIntent);
+            } else if(Build.VERSION.SDK_INT >= 19){
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calobj.getTimeInMillis(), pendingIntent);
+            } else{
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calobj.getTimeInMillis(), pendingIntent);
+            }
         }
 
         realm.close();

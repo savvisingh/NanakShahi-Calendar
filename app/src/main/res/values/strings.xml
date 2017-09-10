@@ -109,4 +109,8 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="title_activity_search_results">SearchResultsActivity</string>
+    <string name="title_activity_add_edit_event">Add or Edit event</string>
+    <string name="event_title">Title</string>
+    <string name="event_description">Desctiption (optional)</string>
+    <string name="no_result">Sorry No results found :(</string>
 </resources>

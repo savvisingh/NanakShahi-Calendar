@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.p_v.flexiblecalendar.FlexibleCalendarView;
 import com.p_v.flexiblecalendar.entity.Event;
 import com.p_v.flexiblecalendar.view.BaseCellView;
@@ -40,20 +42,22 @@ import apps.savvisingh.nanakshahicalendar.R;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements View.OnClickListener{
 
     private TextView monthTextView;
     private BottomSheetDialog dialog;
 
     private AdView mAdView;
 
+    private FloatingActionButton editButton;
+
+    private Calendar toolbarCal;
 
     private Realm realm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
 
 
         mAdView = (AdView) findViewById(R.id.adView);
@@ -65,6 +69,7 @@ public class HomeActivity extends AppCompatActivity {
         InitCalendarView();
 
         Calendar cal = Calendar.getInstance();
+        toolbarCal = Calendar.getInstance();
 
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         String formattedDate = df.format(cal.getTime());
@@ -95,6 +100,9 @@ public class HomeActivity extends AppCompatActivity {
         ImageView leftArrow = (ImageView)findViewById(R.id.left_arrow);
         ImageView rightArrow = (ImageView)findViewById(R.id.right_arrow);
 
+        editButton = (FloatingActionButton) findViewById(R.id.addEvents);
+        editButton.setOnClickListener(this);
+
         monthTextView = (TextView)findViewById(R.id.month_text_view);
 
         final Calendar cal = Calendar.getInstance();
@@ -119,16 +127,15 @@ public class HomeActivity extends AppCompatActivity {
         calendarView.setOnMonthChangeListener(new FlexibleCalendarView.OnMonthChangeListener() {
             @Override
             public void onMonthChange(int year, int month, @FlexibleCalendarView.Direction int direction) {
-                Calendar cal = Calendar.getInstance();
-                cal.set(year, month, 1);
+                toolbarCal.set(year, month, 1);
 
                 SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-                String formattedDate = df.format(cal.getTime());
+                String formattedDate = df.format(toolbarCal.getTime());
 
                 getSupportActionBar().setTitle(formattedDate);
 
 
-                monthTextView.setText(cal.getDisplayName(Calendar.MONTH,
+                monthTextView.setText(toolbarCal.getDisplayName(Calendar.MONTH,
                         Calendar.LONG, Locale.ENGLISH));
 
             }
@@ -217,11 +224,9 @@ public class HomeActivity extends AppCompatActivity {
             public void onDateClick(int year, int month, int day) {
 
 
-                Calendar cal = Calendar.getInstance();
-                cal.set(year, month, day);
-
-                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-                String formattedDate = df.format(cal.getTime());
+                toolbarCal.set(year, month, day);
+                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
+                String formattedDate = df.format(toolbarCal.getTime());
 
                 getSupportActionBar().setTitle(formattedDate);
 
@@ -258,8 +263,8 @@ public class HomeActivity extends AppCompatActivity {
             public void onItemClick(BottomSheetAdapter.ItemHolder item, int position) {
                 dismissDialog();
                 Intent intent = new Intent(HomeActivity.this, EventActivity.class);
-                intent.putExtra("event_id", results.get(position).getId());
-                //startActivity(intent);
+                intent.putExtra("event_id", String.valueOf(results.get(position).getId()));
+                startActivity(intent);
             }
         });
 
@@ -336,4 +341,12 @@ public class HomeActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @Override
+    public void onClick(View view) {
+        if(view.getId() == R.id.addEvents){
+            Intent intent = new Intent(HomeActivity.this, AddEditEvent.class);
+            intent.putExtra(AppConstants.TIME_IN_MILLI_SEC, toolbarCal.getTimeInMillis());
+            startActivity(intent);
+        }
+    }
 }

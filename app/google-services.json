@@ -59,11 +59,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "519558638668-7gj0u6mhbmt8fqk6t9rkc803dv73aaq8.apps.googleusercontent.com",
+          "client_id": "519558638668-v39jonqqhcjq59qh8cope9b2mm87435j.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.mdgiitr.nanakshahicalendar",
             "certificate_hash": "37f84c923b4aef449a8329963707c378d3cdc274"
+          }
+        },
+        {
+          "client_id": "519558638668-eg37ulmgt533lq2d8dh561mgvlgl59sd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mdgiitr.nanakshahicalendar",
+            "certificate_hash": "fb7cb22d1d381793f4f734ef10b2f05464a0d9a1"
           }
         },
         {

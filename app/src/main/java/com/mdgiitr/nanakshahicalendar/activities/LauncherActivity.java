@@ -12,7 +12,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import apps.savvisingh.nanakshahicalendar.R;
+
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.mdgiitr.nanakshahicalendar.data.SharedPrefHelper;
 import com.mdgiitr.nanakshahicalendar.model.Event;
+
+import java.util.Calendar;
+import java.util.Date;
+
 import io.realm.Realm;
 
 /**
@@ -20,19 +27,6 @@ import io.realm.Realm;
  * status bar and navigation/system bar) with user interaction.
  */
 public class LauncherActivity extends AppCompatActivity {
-    /**
-     * Whether or not the system UI should be auto-hidden after
-     * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
-     */
-    private static final boolean AUTO_HIDE = true;
-
-    /**
-     * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
-     * user interaction before hiding the system UI.
-     */
-    private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
-
-
 
     private Realm realm;
 
@@ -48,12 +42,16 @@ public class LauncherActivity extends AppCompatActivity {
             realm = Realm.getDefaultInstance();
         }
 
-        if(realm.where(Event.class).count()>0){
+        final SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(getApplicationContext());
+
+        Log.d("checks", sharedPrefHelper.getDatabaseDownloaded() + "");
+
+        if(sharedPrefHelper.getDatabaseDownloaded()){
             Intent intent = new Intent(LauncherActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();
         }else {
-            //FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            FirebaseMessaging.getInstance().subscribeToTopic("updates");
             DatabaseReference mFirebaseDatabase = FirebaseDatabase.getInstance().getReference();
 
             mFirebaseDatabase.child("Events").orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
@@ -70,8 +68,15 @@ public class LauncherActivity extends AppCompatActivity {
                             event.setTitle((String) item.child("title").getValue());
                             event.setDescription((String) item.child("description").getValue());
                             event.setEvent_type(((Long) item.child("event_type").getValue()).intValue());
+                            Calendar cal = Calendar.getInstance();
+                            cal.set(Calendar.DAY_OF_MONTH, event.getDay());
+                            cal.set(Calendar.MONTH, event.getMonth());
+                            cal.set(Calendar.YEAR, event.getYear());
+                            cal.set(Calendar.HOUR_OF_DAY, 0);
+                            cal.set(Calendar.MINUTE, 0);
+                            event.setDate(cal.getTime());
 
-                            Log.d("Event", item.toString());
+                            //Log.d("Event", item.toString());
                             realm.executeTransaction(new Realm.Transaction() {
                                 @Override
                                 public void execute(Realm realm) {
@@ -81,6 +86,8 @@ public class LauncherActivity extends AppCompatActivity {
 
                         }
 
+                        sharedPrefHelper.setDataBaseDownloaded(true);
+                        Log.d("checks", sharedPrefHelper.getDatabaseDownloaded() + "");
                         Intent intent = new Intent(LauncherActivity.this, HomeActivity.class);
                         startActivity(intent);
                         finish();
@@ -89,7 +96,7 @@ public class LauncherActivity extends AppCompatActivity {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
+                    sharedPrefHelper.setDataBaseDownloaded(false);
                 }
             });
 

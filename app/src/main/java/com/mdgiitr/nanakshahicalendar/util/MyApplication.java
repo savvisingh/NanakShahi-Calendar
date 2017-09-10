@@ -21,6 +21,7 @@ public class MyApplication extends Application {
         Realm.init(this);
         MobileAds.initialize(this, "ca-app-pub-2995010605730030~9551781504");
 
+
     }
 
     @Override
