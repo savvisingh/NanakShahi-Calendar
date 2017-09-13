@@ -13,8 +13,10 @@ public class AppConstants {
     public static final int HISTORICAL_DAYS = 5;
     public static final int GOVERNMENT_HOLIDAY = 6;
 
-    public static final String KEY_DATABASE_SAVED = "database_save_complete";
+    public static final String KEY_DATABASE_SAVED = "database downloaded";
+    public static final String KEY_DATABASE_VERSION = "database version";
 
     public static final String TIME_IN_MILLI_SEC = "time_in_milli_sec";
+
 
 }

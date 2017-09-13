@@ -91,9 +91,13 @@
 
         <activity
             android:name="com.mdgiitr.nanakshahicalendar.activities.AddEditEvent"
-            android:label="@string/title_activity_add_edit_event"
             android:exported="true"
+            android:label="@string/title_activity_add_edit_event"
             android:theme="@style/AppTheme" />
+
+        <service
+            android:name="com.mdgiitr.nanakshahicalendar.service.UpdateDataBaseService"
+            android:exported="false"></service>
     </application>
 
 </manifest>

@@ -18,7 +18,6 @@ import com.mdgiitr.nanakshahicalendar.data.SharedPrefHelper;
 import com.mdgiitr.nanakshahicalendar.model.Event;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import io.realm.Realm;
 
@@ -52,6 +51,8 @@ public class LauncherActivity extends AppCompatActivity {
             finish();
         }else {
             FirebaseMessaging.getInstance().subscribeToTopic("updates");
+            FirebaseMessaging.getInstance().subscribeToTopic("UpdateDatabase");
+            FirebaseMessaging.getInstance().subscribeToTopic("notify");
             DatabaseReference mFirebaseDatabase = FirebaseDatabase.getInstance().getReference();
 
             mFirebaseDatabase.child("Events").orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {

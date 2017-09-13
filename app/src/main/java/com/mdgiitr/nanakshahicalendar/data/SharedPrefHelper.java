@@ -26,4 +26,12 @@ public class SharedPrefHelper {
     public void setDataBaseDownloaded(boolean flag){
         sharedPreferences.edit().putBoolean(AppConstants.KEY_DATABASE_SAVED, flag).apply();
     }
+
+    public String getDataBaseVersion(){
+        return sharedPreferences.getString(AppConstants.KEY_DATABASE_VERSION, "");
+    }
+
+    public void setDataBaseVersion(String version){
+        sharedPreferences.edit().putString(AppConstants.KEY_DATABASE_VERSION, version).apply();
+    }
 }
