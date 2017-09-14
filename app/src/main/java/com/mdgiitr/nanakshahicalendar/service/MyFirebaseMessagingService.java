@@ -38,20 +38,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if(from.equalsIgnoreCase(UPDATE_DATABASE_TOPIC)){
             if(!remoteMessage.getData().isEmpty() && remoteMessage.getData().containsKey(DATABASE_VERSION)){
                 Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-                //UpdateDataBaseService.startUpdateDataService(getApplicationContext(), remoteMessage.getData().get(DATABASE_VERSION));
-                updateData(remoteMessage.getData().get(DATABASE_VERSION));
+                 updateData(remoteMessage.getData().get(DATABASE_VERSION));
                 return;
             }
         }
 
 
-//        // Check if message contains a notification payload.
-//        if (remoteMessage.getNotification() != null) {
-//            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-//        }
 
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
+
     }
 
     @Override
@@ -63,8 +57,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void updateData(final String version){
 
         final SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(getApplicationContext());
-
-        Log.d("UpdateDataBaseService", sharedPrefHelper.getDataBaseVersion()+" jkjkj");
 
         if(sharedPrefHelper.getDatabaseDownloaded() && !sharedPrefHelper.getDataBaseVersion().equalsIgnoreCase(version)){
             FirebaseApp.initializeApp(getApplicationContext());
@@ -86,11 +78,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                             final Event event = new Event();
                             event.setId(((Long) item.child("id").getValue()).intValue());
-                            event.setDay(((Long) item.child("day").getValue()).intValue() + 1);
-                            event.setMonth(((Long) item.child("month").getValue()).intValue() - 1 );
+                            event.setDay(((Long) item.child("day").getValue()).intValue());
+                            event.setMonth(((Long) item.child("month").getValue()).intValue()-1);
                             event.setYear(((Long) item.child("year").getValue()).intValue());
-                            //event.setTitle((String) item.child("title").getValue());
-                            event.setTitle("Test Test");
+                            event.setTitle((String) item.child("title").getValue());
                             event.setDescription((String) item.child("description").getValue());
                             event.setEvent_type(((Long) item.child("event_type").getValue()).intValue());
                             Calendar cal = Calendar.getInstance();
