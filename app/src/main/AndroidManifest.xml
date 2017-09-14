@@ -12,6 +12,14 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="a9bd2a46dc1accedfc499471ba2738d66a582789"
+            />
         <provider
             android:name="com.mdgiitr.nanakshahicalendar.util.MySuggestionProvider"
             android:authorities="com.mdgiitr.nanakshahicalendar.util.MySuggestionProvider" />
