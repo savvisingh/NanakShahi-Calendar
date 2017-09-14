@@ -6,6 +6,7 @@ buildscript {
         maven {
             url "https://maven.google.com"
         }
+        maven { url 'https://maven.fabric.io/public' }
     }
 
     dependencies {
@@ -15,8 +16,10 @@ buildscript {
         // in the individual module build.gradle files
         classpath 'com.google.gms:google-services:3.0.0'
         classpath "io.realm:realm-gradle-plugin:2.3.0"
+        classpath 'io.fabric.tools:gradle:1.24.1'
     }
 }
+
 
 allprojects {
     repositories {
