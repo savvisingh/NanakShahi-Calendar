@@ -2,6 +2,9 @@ package com.mdgiitr.nanakshahicalendar.service;
 
 import android.util.Log;
 
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -56,9 +59,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void updateData(final String version){
 
+
         final SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(getApplicationContext());
 
         if(sharedPrefHelper.getDatabaseDownloaded() && !sharedPrefHelper.getDataBaseVersion().equalsIgnoreCase(version)){
+
+            final TaskCompletionSource<DataSnapshot> tcs = new TaskCompletionSource<>();
+
             FirebaseApp.initializeApp(getApplicationContext());
 
             DatabaseReference mFirebaseDatabase = FirebaseDatabase.getInstance().getReference();
@@ -66,51 +73,64 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             mFirebaseDatabase.child("Events").orderByKey().addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        for (final DataSnapshot item : dataSnapshot.getChildren()) {
-
-                            try {
-                                realm = Realm.getDefaultInstance();
-                            } catch (IllegalStateException e) {
-                                Realm.init(getApplicationContext());
-                                realm = Realm.getDefaultInstance();
-                            }
-
-                            final Event event = new Event();
-                            event.setId(((Long) item.child("id").getValue()).intValue());
-                            event.setDay(((Long) item.child("day").getValue()).intValue());
-                            event.setMonth(((Long) item.child("month").getValue()).intValue()-1);
-                            event.setYear(((Long) item.child("year").getValue()).intValue());
-                            event.setTitle((String) item.child("title").getValue());
-                            event.setDescription((String) item.child("description").getValue());
-                            event.setEvent_type(((Long) item.child("event_type").getValue()).intValue());
-                            Calendar cal = Calendar.getInstance();
-                            cal.set(Calendar.DAY_OF_MONTH, event.getDay());
-                            cal.set(Calendar.MONTH, event.getMonth());
-                            cal.set(Calendar.YEAR, event.getYear());
-                            cal.set(Calendar.HOUR_OF_DAY, 0);
-                            cal.set(Calendar.MINUTE, 0);
-                            event.setDate(cal.getTime());
-
-                            realm.executeTransaction(new Realm.Transaction() {
-                                @Override
-                                public void execute(Realm realm) {
-                                    realm.copyToRealmOrUpdate(event);
-                                }
-                            });
-
-                        }
-
-                        sharedPrefHelper.setDataBaseVersion(version);
-                        Log.d("checks", sharedPrefHelper.getDataBaseVersion());
-                    }
+                    tcs.setResult(dataSnapshot);
                 }
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
+                    tcs.setException(databaseError.toException());
                 }
             });
+
+            Task<DataSnapshot> task = tcs.getTask();
+
+            try{
+                Tasks.await(task);
+            }catch (Exception e){
+                task = Tasks.forException(e);
+            }
+
+            if(task.isSuccessful()){
+                DataSnapshot dataSnapshot = task.getResult();
+                if (dataSnapshot.exists()) {
+                    for (final DataSnapshot item : dataSnapshot.getChildren()) {
+
+                        try {
+                            realm = Realm.getDefaultInstance();
+                        } catch (IllegalStateException e) {
+                            Realm.init(getApplicationContext());
+                            realm = Realm.getDefaultInstance();
+                        }
+
+                        final Event event = new Event();
+                        event.setId(((Long) item.child("id").getValue()).intValue());
+                        event.setDay(((Long) item.child("day").getValue()).intValue());
+                        event.setMonth(((Long) item.child("month").getValue()).intValue()-1);
+                        event.setYear(((Long) item.child("year").getValue()).intValue());
+                        event.setTitle((String) item.child("title").getValue());
+                        event.setDescription((String) item.child("description").getValue());
+                        event.setEvent_type(((Long) item.child("event_type").getValue()).intValue());
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(Calendar.DAY_OF_MONTH, event.getDay());
+                        cal.set(Calendar.MONTH, event.getMonth());
+                        cal.set(Calendar.YEAR, event.getYear());
+                        cal.set(Calendar.HOUR_OF_DAY, 0);
+                        cal.set(Calendar.MINUTE, 0);
+                        event.setDate(cal.getTime());
+
+                        realm.executeTransaction(new Realm.Transaction() {
+                            @Override
+                            public void execute(Realm realm) {
+                                realm.copyToRealmOrUpdate(event);
+                            }
+                        });
+
+                    }
+                    sharedPrefHelper.setDataBaseVersion(version);
+                    Log.d("checks", sharedPrefHelper.getDataBaseVersion());
+                }
+            }
+
         }
 
     }
