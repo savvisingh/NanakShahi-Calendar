@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +38,7 @@ public class LauncherActivity extends AppCompatActivity {
         try {
             realm = Realm.getDefaultInstance();
         } catch (IllegalStateException e) {
+            Crashlytics.logException(e);
             Realm.init(getApplicationContext());
             realm = Realm.getDefaultInstance();
         }
@@ -98,6 +100,7 @@ public class LauncherActivity extends AppCompatActivity {
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                     sharedPrefHelper.setDataBaseDownloaded(false);
+                    Crashlytics.logException(databaseError.toException());
                 }
             });
 

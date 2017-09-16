@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.mdgiitr.nanakshahicalendar.model.Event;
 import com.mdgiitr.nanakshahicalendar.util.AppConstants;
 
@@ -103,6 +104,7 @@ public class AddEditEvent extends AppCompatActivity {
 
         }catch (Exception e){
             Log.d("AddEditEvent", e.getMessage() + "-" + e.getLocalizedMessage());
+            Crashlytics.logException(e);
         }
 
         SimpleDateFormat df = new SimpleDateFormat("dd MMM yyyy", Locale.US);
@@ -129,6 +131,7 @@ public class AddEditEvent extends AppCompatActivity {
                     }
                 });
             }catch (Exception e){
+                Crashlytics.logException(e);
                 e.printStackTrace();
                 onBackPressed();
             }
@@ -179,6 +182,7 @@ public class AddEditEvent extends AppCompatActivity {
 
         }catch (Exception e){
             e.printStackTrace();
+            Crashlytics.logException(e);
         }
 
 

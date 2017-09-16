@@ -2,6 +2,7 @@ package com.mdgiitr.nanakshahicalendar.service;
 
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.gms.tasks.Tasks;
@@ -45,10 +46,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 return;
             }
         }
-
-
-
-
     }
 
     @Override
@@ -129,6 +126,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     sharedPrefHelper.setDataBaseVersion(version);
                     Log.d("checks", sharedPrefHelper.getDataBaseVersion());
                 }
+            }else {
+                Crashlytics.logException(task.getException());
             }
 
         }
