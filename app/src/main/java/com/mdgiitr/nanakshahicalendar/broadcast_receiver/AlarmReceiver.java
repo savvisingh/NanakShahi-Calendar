@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -52,6 +54,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
                     PendingIntent myIntent = PendingIntent.getActivity(context, 0, new Intent(context, HomeActivity.class), 0);
 
+                    Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
 
                     NotificationCompat.Builder mBuilder =
                             new NotificationCompat.Builder(context)
@@ -60,6 +64,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                                     .setStyle(new NotificationCompat.BigTextStyle().bigText(event.getDescription()))
                                     .setContentTitle(event.getTitle())
                                     .setContentText(event.getDescription())
+                                    .setSound(defaultSoundUri)
                                     .setContentIntent(myIntent);
 
                     NotificationManager mNotificationManager = (NotificationManager) context

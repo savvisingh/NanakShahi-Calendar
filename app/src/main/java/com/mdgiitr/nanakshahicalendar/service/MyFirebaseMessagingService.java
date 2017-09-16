@@ -1,5 +1,13 @@
 package com.mdgiitr.nanakshahicalendar.service;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
@@ -14,11 +22,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.mdgiitr.nanakshahicalendar.activities.HomeActivity;
 import com.mdgiitr.nanakshahicalendar.data.SharedPrefHelper;
 import com.mdgiitr.nanakshahicalendar.model.Event;
 
 import java.util.Calendar;
 
+import apps.savvisingh.nanakshahicalendar.R;
 import io.realm.Realm;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
@@ -46,6 +56,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 return;
             }
         }
+
+        sendNotification(remoteMessage);
     }
 
     @Override
@@ -132,5 +144,27 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         }
 
+    }
+
+
+    private void sendNotification(RemoteMessage remoteMessage) {
+
+        Intent intent = new Intent(this, HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_khanda)
+                        .setTicker("Waheguru")
+                        .setContentTitle(remoteMessage.getNotification().getTitle())
+                        .setContentText(remoteMessage.getNotification().getBody())
+                        .setContentIntent(pendingIntent)
+                        .setSound(defaultSoundUri);
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(12321, mBuilder.build());
     }
 }
