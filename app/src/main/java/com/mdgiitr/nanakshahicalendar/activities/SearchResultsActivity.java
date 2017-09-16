@@ -11,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.mdgiitr.nanakshahicalendar.adapter.SearchResultsAdapter;
 import com.mdgiitr.nanakshahicalendar.model.Event;
 
@@ -74,13 +76,21 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchRe
             String query = intent.getStringExtra(SearchManager.QUERY);
             //use the query to search your data somehow
 
+            Answers.getInstance().logCustom(new CustomEvent("Search Opened")
+                    .putCustomAttribute("query", query));
+
             SearchRecentSuggestions suggestions = new SearchRecentSuggestions(this,
                     MySuggestionProvider.AUTHORITY, MySuggestionProvider.MODE);
             suggestions.saveRecentQuery(query, null);
 
             getSupportActionBar().setTitle(query);
 
-            RealmResults<Event> results = realm.where(Event.class).like("description", "*" + query + "*", Case.INSENSITIVE).findAllAsync();
+            RealmResults<Event> results =
+                    realm.where(Event.class)
+                        .like("description", "*" + query + "*", Case.INSENSITIVE)
+                        .or()
+                        .like("title", "*" + query + "*", Case.INSENSITIVE)
+                        .findAllAsync();
 
             RealmChangeListener<RealmResults<Event>> callback = new RealmChangeListener<RealmResults<Event>>() {
                 @Override

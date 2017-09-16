@@ -307,7 +307,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_about_us) {
-
             Intent intent = new Intent(HomeActivity.this, AboutDeveloper.class);
             startActivity(intent);
             return true;

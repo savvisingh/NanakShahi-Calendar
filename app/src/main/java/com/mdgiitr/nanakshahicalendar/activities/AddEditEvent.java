@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.mdgiitr.nanakshahicalendar.model.Event;
 import com.mdgiitr.nanakshahicalendar.util.AppConstants;
 
@@ -144,6 +146,7 @@ public class AddEditEvent extends AppCompatActivity {
     public void saveEvent(){
 
         final String eventTitle = eventTitleEditText.getText().toString();
+        final String eventDescription = eventDescriptionEditText.getText().toString();
         if(TextUtils.isEmpty(eventTitle)){
             eventTitleLayout.setError("Title cannot be empty");
             return;
@@ -158,6 +161,16 @@ public class AddEditEvent extends AppCompatActivity {
                 nextId = 5000;
             }
             event.setId(nextId);
+
+            Answers.getInstance().logCustom(new CustomEvent("Save Event")
+                    .putCustomAttribute("type", "new")
+                    .putCustomAttribute("title", eventTitle)
+                    .putCustomAttribute("description", eventDescription));
+        }else {
+            Answers.getInstance().logCustom(new CustomEvent("Save Event")
+                    .putCustomAttribute("type", "edit")
+                    .putCustomAttribute("title", eventTitle)
+                    .putCustomAttribute("description", eventDescription));
         }
 
         try{
@@ -172,7 +185,6 @@ public class AddEditEvent extends AppCompatActivity {
                     myCalendar.set(Calendar.MINUTE, 0);
                     event.setDate(myCalendar.getTime());
 
-                    String eventDescription = eventDescriptionEditText.getText().toString();
                     if(!TextUtils.isEmpty(eventDescription))
                         event.setDescription(eventDescription);
 
