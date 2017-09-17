@@ -10,6 +10,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * Created by SavviSingh on 27/01/17.
@@ -24,10 +25,15 @@ public class MyApplication extends Application {
 
         super.onCreate();
         Realm.init(this);
+        RealmConfiguration config = new RealmConfiguration.Builder()
+                .name("org.calendar.database")
+                .schemaVersion(1)
+                .deleteRealmIfMigrationNeeded()
+                .build();
+        Realm.setDefaultConfiguration(config);
         MobileAds.initialize(this, "ca-app-pub-2995010605730030~9551781504");
         Fabric.with(this, new Crashlytics());
         mFireBaseAnalytics = FirebaseAnalytics.getInstance(this);
-
 
     }
 
@@ -39,5 +45,11 @@ public class MyApplication extends Application {
 
     public static FirebaseAnalytics getFireBaseAnalyticsInstance(){
         return mFireBaseAnalytics;
+    }
+
+    @Override
+    public void onTerminate() {
+        Realm.getDefaultInstance().close();
+        super.onTerminate();
     }
 }
