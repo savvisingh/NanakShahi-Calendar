@@ -21,6 +21,7 @@ import com.mdgiitr.nanakshahicalendar.model.Event;
 import java.util.Calendar;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -35,13 +36,6 @@ public class LauncherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_launcher);
-        try {
-            realm = Realm.getDefaultInstance();
-        } catch (IllegalStateException e) {
-            Crashlytics.logException(e);
-            Realm.init(getApplicationContext());
-            realm = Realm.getDefaultInstance();
-        }
 
         final SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(getApplicationContext());
 
@@ -52,6 +46,19 @@ public class LauncherActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }else {
+            try {
+                realm = Realm.getDefaultInstance();
+            } catch (IllegalStateException e) {
+                Crashlytics.logException(e);
+                Realm.init(getApplicationContext());
+                RealmConfiguration config = new RealmConfiguration.Builder()
+                        .name("org.calendar.database")
+                        .schemaVersion(1)
+                        .deleteRealmIfMigrationNeeded()
+                        .build();
+                Realm.setDefaultConfiguration(config);
+                realm = Realm.getDefaultInstance();
+            }
             FirebaseMessaging.getInstance().subscribeToTopic("updates");
             FirebaseMessaging.getInstance().subscribeToTopic("UpdateDatabase");
             FirebaseMessaging.getInstance().subscribeToTopic("notify");
