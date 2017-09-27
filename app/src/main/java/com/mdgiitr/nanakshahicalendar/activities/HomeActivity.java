@@ -1,12 +1,19 @@
 package com.mdgiitr.nanakshahicalendar.activities;
 
+//TODO Scroll calender scrollview to bottom if its last week
+//TODO Check for Recyclerview rendering in API 16
+
 import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -19,10 +26,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.mdgiitr.nanakshahicalendar.adapter.MonthEventListAdapter;
+import com.mdgiitr.nanakshahicalendar.model.CalenderEvent;
+import com.mdgiitr.nanakshahicalendar.util.Logr;
 import com.p_v.flexiblecalendar.FlexibleCalendarView;
 import com.p_v.flexiblecalendar.entity.Event;
 import com.p_v.flexiblecalendar.view.BaseCellView;
@@ -38,8 +49,13 @@ import java.util.List;
 import java.util.Locale;
 
 import apps.savvisingh.nanakshahicalendar.R;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.realm.Realm;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -52,17 +68,37 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     private Calendar toolbarCal;
 
+    @BindView(R.id.monthEventList)
+    RecyclerView monthEventList;
+
+    private MonthEventListAdapter adapter;
+
+    private ArrayList<CalenderEvent> monthListevents;
+
+    @BindView(R.id.calender_layout)
+    NestedScrollView calenderLayout;
+
+    @BindView(R.id.month_layout)
+    LinearLayout monthLayout;
+
+    @BindView(R.id.switchType)
+    FloatingActionButton switchCalType;
+
+    @BindView(R.id.app_bar)
+    AppBarLayout appBarLayout;
+
     private Realm realm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        ButterKnife.bind(this);
 
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
+        realm = Realm.getDefaultInstance();
 
         InitNavigationDrawer();
         InitCalendarView();
@@ -75,9 +111,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         getSupportActionBar().setTitle(formattedDate);
 
-        realm = Realm.getDefaultInstance();
 
-        Log.d("events", String.valueOf(realm.where(com.mdgiitr.nanakshahicalendar.model.Event.class).count()));
+        Log.d("events", String.valueOf(realm.where(CalenderEvent.class).count()));
 
         AlarmService.setAlarm(this);
 
@@ -89,6 +124,25 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        monthListevents = new ArrayList<>();
+        adapter = new MonthEventListAdapter(monthListevents);
+        monthEventList.setAdapter(adapter);
+        monthEventList.setHasFixedSize(true);
+        monthEventList.setLayoutManager(new LinearLayoutManager(this));
+
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (verticalOffset < 0){
+                    editButton.hide();
+                    switchCalType.hide();
+                }
+                else if (verticalOffset == 0){
+                    editButton.show();
+                    switchCalType.show();
+                }
+            }
+        });
 
     }
 
@@ -107,7 +161,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         final Calendar cal = Calendar.getInstance();
         cal.set(calendarView.getSelectedDateItem().getYear(), calendarView.getSelectedDateItem().getMonth(), 1);
         monthTextView.setText(cal.getDisplayName(Calendar.MONTH,
-                Calendar.LONG, Locale.ENGLISH) );
+                Calendar.LONG, Locale.ENGLISH));
+        setMonthEventList(cal.get(Calendar.MONTH));
 
 
         leftArrow.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +192,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 monthTextView.setText(toolbarCal.getDisplayName(Calendar.MONTH,
                         Calendar.LONG, Locale.ENGLISH));
 
+                setMonthEventList(month);
+
             }
         });
         calendarView.setShowDatesOutsideMonth(false);
@@ -165,7 +222,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 if (cellView == null) {
                     LayoutInflater inflater = LayoutInflater.from(HomeActivity.this);
                     cellView = (BaseCellView) inflater.inflate(R.layout.week_cell_view, null);
-                    cellView.setTextSize(15);
+                    cellView.setTextSize(14);
                 }
                 return cellView;
             }
@@ -182,18 +239,18 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
                 List<CustomEvent> colorLst = new ArrayList<>();
 
-                RealmResults<com.mdgiitr.nanakshahicalendar.model.Event> results = realm.where(com.mdgiitr.nanakshahicalendar.model.Event.class).equalTo("day", day)
+                RealmResults<CalenderEvent> results = realm.where(CalenderEvent.class).equalTo("day", day)
                         .equalTo("month", month).equalTo("year", year).findAll();
 
                 if(results.size()>0){
                     Log.d("Events", results.size() +" ");
-                    for(com.mdgiitr.nanakshahicalendar.model.Event event:results){
-                        switch (event.getEvent_type()) {
+                    for(CalenderEvent calenderEvent :results){
+                        switch (calenderEvent.getEvent_type()) {
                             case AppConstants.MASYA:
                                 colorLst.add(new CustomEvent(android.R.color.black));
                                 break;
                             case AppConstants.SAGRANDH:
-                                colorLst.add(new CustomEvent(android.R.color.holo_purple));
+                                colorLst.add(new CustomEvent(android.R.color.holo_orange_dark));
                                 break;
                             case AppConstants.GURUPURAB:
                                 colorLst.add(new CustomEvent(android.R.color.holo_red_dark));
@@ -205,7 +262,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                                 colorLst.add(new CustomEvent(android.R.color.holo_blue_dark));
                                 break;
                             case AppConstants.GOVERNMENT_HOLIDAY:
-                                colorLst.add(new CustomEvent(android.R.color.holo_orange_dark));
+                                colorLst.add(new CustomEvent(android.R.color.holo_purple));
                                 break;
                         }
                     }
@@ -222,19 +279,21 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onDateClick(int year, int month, int day) {
 
-
                 toolbarCal.set(year, month, day);
                 SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
                 String formattedDate = df.format(toolbarCal.getTime());
 
                 getSupportActionBar().setTitle(formattedDate);
 
-                RealmResults<com.mdgiitr.nanakshahicalendar.model.Event> realmResults = realm.where(com.mdgiitr.nanakshahicalendar.model.Event.class).equalTo("day", day)
-                        .equalTo("month", month).equalTo("year", year).findAll();
-
-                if(realmResults.size()>0){
-                    createDialog(realmResults);
-                }
+                realm.where(CalenderEvent.class).equalTo("day", day)
+                        .equalTo("month", month).equalTo("year", year).findAllAsync().addChangeListener(new RealmChangeListener<RealmResults<CalenderEvent>>() {
+                            @Override
+                            public void onChange(RealmResults<CalenderEvent> realmResults) {
+                                if(realmResults.size()>0){
+                                    createDialog(realmResults);
+                                }
+                            }
+                        });
 
             }
         });
@@ -250,11 +309,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         return false;
     }
 
-    private void createDialog(final RealmResults<com.mdgiitr.nanakshahicalendar.model.Event> results) {
+    private void createDialog(final RealmResults<CalenderEvent> results) {
         if (dismissDialog()) {
             return;
         }
-
 
         BottomSheetAdapter adapter = new BottomSheetAdapter(results);
         adapter.setOnItemClickListener(new BottomSheetAdapter.OnItemClickListener() {
@@ -345,6 +403,31 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(HomeActivity.this, AddEditEvent.class);
             intent.putExtra(AppConstants.TIME_IN_MILLI_SEC, toolbarCal.getTimeInMillis());
             startActivity(intent);
+        }
+    }
+
+    private void setMonthEventList(int month){
+        realm.where(CalenderEvent.class).equalTo("month", month).findAllSortedAsync("date", Sort.ASCENDING).addChangeListener(new RealmChangeListener<RealmResults<CalenderEvent>>() {
+            @Override
+            public void onChange(RealmResults<CalenderEvent> element) {
+                monthListevents.clear();
+                monthListevents.addAll(realm.copyFromRealm(element));
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+    }
+
+    @OnClick(R.id.switchType)
+    public void switchCalView(){
+        if(calenderLayout != null && calenderLayout.getVisibility() == View.VISIBLE){
+            calenderLayout.setVisibility(View.GONE);
+            monthLayout.setVisibility(View.VISIBLE);
+            switchCalType.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_date_range_type_24dp));
+        }else if(monthLayout != null && monthLayout.getVisibility() == View.VISIBLE){
+            monthLayout.setVisibility(View.GONE);
+            calenderLayout.setVisibility(View.VISIBLE);
+            switchCalType.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_list_type_24dp));
         }
     }
 }

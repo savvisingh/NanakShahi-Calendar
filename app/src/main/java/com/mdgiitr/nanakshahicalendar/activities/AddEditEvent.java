@@ -17,7 +17,7 @@ import android.widget.TextView;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
-import com.mdgiitr.nanakshahicalendar.model.Event;
+import com.mdgiitr.nanakshahicalendar.model.CalenderEvent;
 import com.mdgiitr.nanakshahicalendar.util.AppConstants;
 
 import java.text.SimpleDateFormat;
@@ -54,7 +54,7 @@ public class AddEditEvent extends AppCompatActivity {
 
     private Realm realm;
 
-    private Event event = null;
+    private CalenderEvent calenderEvent = null;
 
     private Calendar myCalendar;
 
@@ -82,17 +82,17 @@ public class AddEditEvent extends AppCompatActivity {
             if(intent.getExtras() != null){
                 if(intent.getStringExtra("event_id") != null){
                     eventId = Integer.parseInt(intent.getStringExtra("event_id"));
-                    RealmResults<Event> realmResults = realm.where(com.mdgiitr.nanakshahicalendar.model.Event.class).equalTo("id", eventId).findAll();
+                    RealmResults<CalenderEvent> realmResults = realm.where(CalenderEvent.class).equalTo("id", eventId).findAll();
                     if(realmResults.size()>0){
-                        event = realmResults.get(0);
+                        calenderEvent = realmResults.get(0);
                     }
-                    if(event != null){
-                        myCalendar.set(Calendar.YEAR, event.getYear());
-                        myCalendar.set(Calendar.MONTH, event.getMonth());
-                        myCalendar.set(Calendar.DAY_OF_MONTH, event.getDay());
-                        eventTitleEditText.setText(event.getTitle());
-                        if(event.getDescription() != null){
-                            eventDescriptionEditText.setText(event.getDescription());
+                    if(calenderEvent != null){
+                        myCalendar.set(Calendar.YEAR, calenderEvent.getYear());
+                        myCalendar.set(Calendar.MONTH, calenderEvent.getMonth());
+                        myCalendar.set(Calendar.DAY_OF_MONTH, calenderEvent.getDay());
+                        eventTitleEditText.setText(calenderEvent.getTitle());
+                        if(calenderEvent.getDescription() != null){
+                            eventDescriptionEditText.setText(calenderEvent.getDescription());
                         }
                         action.setText("Delete");
                     }
@@ -127,8 +127,8 @@ public class AddEditEvent extends AppCompatActivity {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        if(event!=null)
-                            event.deleteFromRealm();
+                        if(calenderEvent !=null)
+                            calenderEvent.deleteFromRealm();
                         onBackPressed();
                     }
                 });
@@ -152,22 +152,22 @@ public class AddEditEvent extends AppCompatActivity {
             return;
         }
 
-        if(event==null){
-            event = new Event();
-            event.setEvent_type(AppConstants.GOVERNMENT_HOLIDAY);
-            int maxId = realm.where(Event.class).max("id").intValue();
+        if(calenderEvent ==null){
+            calenderEvent = new CalenderEvent();
+            calenderEvent.setEvent_type(AppConstants.GOVERNMENT_HOLIDAY);
+            int maxId = realm.where(CalenderEvent.class).max("id").intValue();
             int nextId = maxId + 1;
             if(maxId < 5000){
                 nextId = 5000;
             }
-            event.setId(nextId);
+            calenderEvent.setId(nextId);
 
-            Answers.getInstance().logCustom(new CustomEvent("Save Event")
+            Answers.getInstance().logCustom(new CustomEvent("Save CalenderEvent")
                     .putCustomAttribute("type", "new")
                     .putCustomAttribute("title", eventTitle)
                     .putCustomAttribute("description", eventDescription));
         }else {
-            Answers.getInstance().logCustom(new CustomEvent("Save Event")
+            Answers.getInstance().logCustom(new CustomEvent("Save CalenderEvent")
                     .putCustomAttribute("type", "edit")
                     .putCustomAttribute("title", eventTitle)
                     .putCustomAttribute("description", eventDescription));
@@ -177,18 +177,18 @@ public class AddEditEvent extends AppCompatActivity {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
-                    event.setTitle(eventTitle);
-                    event.setDay(myCalendar.get(Calendar.DAY_OF_MONTH));
-                    event.setMonth(myCalendar.get(Calendar.MONTH));
-                    event.setYear(myCalendar.get(Calendar.YEAR));
+                    calenderEvent.setTitle(eventTitle);
+                    calenderEvent.setDay(myCalendar.get(Calendar.DAY_OF_MONTH));
+                    calenderEvent.setMonth(myCalendar.get(Calendar.MONTH));
+                    calenderEvent.setYear(myCalendar.get(Calendar.YEAR));
                     myCalendar.set(Calendar.HOUR_OF_DAY, 0);
                     myCalendar.set(Calendar.MINUTE, 0);
-                    event.setDate(myCalendar.getTime());
+                    calenderEvent.setDate(myCalendar.getTime());
 
                     if(!TextUtils.isEmpty(eventDescription))
-                        event.setDescription(eventDescription);
+                        calenderEvent.setDescription(eventDescription);
 
-                    realm.copyToRealmOrUpdate(event);
+                    realm.copyToRealmOrUpdate(calenderEvent);
                 }
             });
 

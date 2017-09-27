@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -24,7 +23,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.mdgiitr.nanakshahicalendar.activities.HomeActivity;
 import com.mdgiitr.nanakshahicalendar.data.SharedPrefHelper;
-import com.mdgiitr.nanakshahicalendar.model.Event;
+import com.mdgiitr.nanakshahicalendar.model.CalenderEvent;
 
 import java.util.Calendar;
 
@@ -111,26 +110,26 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                             realm = Realm.getDefaultInstance();
                         }
 
-                        final Event event = new Event();
-                        event.setId(((Long) item.child("id").getValue()).intValue());
-                        event.setDay(((Long) item.child("day").getValue()).intValue());
-                        event.setMonth(((Long) item.child("month").getValue()).intValue()-1);
-                        event.setYear(((Long) item.child("year").getValue()).intValue());
-                        event.setTitle((String) item.child("title").getValue());
-                        event.setDescription((String) item.child("description").getValue());
-                        event.setEvent_type(((Long) item.child("event_type").getValue()).intValue());
+                        final CalenderEvent calenderEvent = new CalenderEvent();
+                        calenderEvent.setId(((Long) item.child("id").getValue()).intValue());
+                        calenderEvent.setDay(((Long) item.child("day").getValue()).intValue());
+                        calenderEvent.setMonth(((Long) item.child("month").getValue()).intValue()-1);
+                        calenderEvent.setYear(((Long) item.child("year").getValue()).intValue());
+                        calenderEvent.setTitle((String) item.child("title").getValue());
+                        calenderEvent.setDescription((String) item.child("description").getValue());
+                        calenderEvent.setEvent_type(((Long) item.child("event_type").getValue()).intValue());
                         Calendar cal = Calendar.getInstance();
-                        cal.set(Calendar.DAY_OF_MONTH, event.getDay());
-                        cal.set(Calendar.MONTH, event.getMonth());
-                        cal.set(Calendar.YEAR, event.getYear());
+                        cal.set(Calendar.DAY_OF_MONTH, calenderEvent.getDay());
+                        cal.set(Calendar.MONTH, calenderEvent.getMonth());
+                        cal.set(Calendar.YEAR, calenderEvent.getYear());
                         cal.set(Calendar.HOUR_OF_DAY, 0);
                         cal.set(Calendar.MINUTE, 0);
-                        event.setDate(cal.getTime());
+                        calenderEvent.setDate(cal.getTime());
 
                         realm.executeTransaction(new Realm.Transaction() {
                             @Override
                             public void execute(Realm realm) {
-                                realm.copyToRealmOrUpdate(event);
+                                realm.copyToRealmOrUpdate(calenderEvent);
                             }
                         });
 

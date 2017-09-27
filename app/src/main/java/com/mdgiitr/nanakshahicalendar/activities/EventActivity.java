@@ -1,9 +1,12 @@
 package com.mdgiitr.nanakshahicalendar.activities;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -11,10 +14,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mdgiitr.nanakshahicalendar.model.Event;
+import com.mdgiitr.nanakshahicalendar.model.CalenderEvent;
 import com.mdgiitr.nanakshahicalendar.util.AppConstants;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -36,6 +37,12 @@ public class EventActivity extends AppCompatActivity {
 
     @BindView(R.id.event_description)
     TextView eventDescription;
+
+    @BindView(R.id.toolbar_layout)
+    CollapsingToolbarLayout toolbarLayout;
+
+    @BindView(R.id.event_edit)
+    FloatingActionButton editFab;
 
     private String eventId = null;
 
@@ -65,19 +72,40 @@ public class EventActivity extends AppCompatActivity {
             eventId = getIntent().getStringExtra("event_id");
         else this.finish();
 
-        Event event = realm.where(Event.class).equalTo("id", Integer.parseInt(eventId)).findFirst();
+        CalenderEvent calenderEvent = realm.where(CalenderEvent.class).equalTo("id", Integer.parseInt(eventId)).findFirst();
 
-        if(event != null){
-            eventtitle.setText(event.getTitle());
+        switch (calenderEvent.getEvent_type()){
+            case AppConstants.MASYA:
+                editFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.black)));
+                break;
+            case AppConstants.SAGRANDH:
+                editFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.holo_orange_dark)));
+                break;
+            case AppConstants.GURUPURAB:
+                editFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.holo_red_dark)));
+                break;
+            case AppConstants.PURANMASHI:
+                editFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.holo_orange_light)));
+                break;
+            case AppConstants.HISTORICAL_DAYS:
+                editFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.holo_blue_dark)));
+                break;
+            case AppConstants.GOVERNMENT_HOLIDAY:
+                editFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.holo_purple)));
+                break;
+        }
 
-            if(event.getDescription() != null)
-                eventDescription.setText(event.getDescription());
+        if(calenderEvent != null){
+            eventtitle.setText(calenderEvent.getTitle());
+
+            if(calenderEvent.getDescription() != null)
+                eventDescription.setText(calenderEvent.getDescription());
             else
                 eventDescription.setVisibility(View.GONE);
 
-            myCalendar.set(Calendar.YEAR, event.getYear());
-            myCalendar.set(Calendar.MONTH, event.getMonth());
-            myCalendar.set(Calendar.DAY_OF_MONTH, event.getDay());
+            myCalendar.set(Calendar.YEAR, calenderEvent.getYear());
+            myCalendar.set(Calendar.MONTH, calenderEvent.getMonth());
+            myCalendar.set(Calendar.DAY_OF_MONTH, calenderEvent.getDay());
 
             SimpleDateFormat df = new SimpleDateFormat("dd MMM yyyy", Locale.US);
             String formattedDate = df.format(myCalendar.getTime());

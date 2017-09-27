@@ -12,7 +12,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by SavviSingh on 26/01/17.
  */
 @IgnoreExtraProperties
-public class Event extends RealmObject{
+public class CalenderEvent extends RealmObject{
     public int day, month, year;
     public String title;
     public  String description;
@@ -22,9 +22,9 @@ public class Event extends RealmObject{
     @PrimaryKey
     public int id;
 
-    public Event(){}
+    public CalenderEvent(){}
 
-    public Event(int day, int month, int year, String title, String description, int event_type) {
+    public CalenderEvent(int day, int month, int year, String title, String description, int event_type) {
         this.day = day;
         this.month = month;
         this.year = year;

@@ -10,7 +10,11 @@ import android.widget.TextView;
 
 
 import apps.savvisingh.nanakshahicalendar.R;
-import com.mdgiitr.nanakshahicalendar.model.Event;
+
+import com.mdgiitr.nanakshahicalendar.calendarview.CustomEvent;
+import com.mdgiitr.nanakshahicalendar.model.CalenderEvent;
+import com.mdgiitr.nanakshahicalendar.util.AppConstants;
+
 import io.realm.RealmResults;
 
 import static com.mdgiitr.nanakshahicalendar.util.AppConstants.GOVERNMENT_HOLIDAY;
@@ -25,9 +29,9 @@ import static com.mdgiitr.nanakshahicalendar.util.AppConstants.SAGRANDH;
  */
 public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.ItemHolder> {
     private OnItemClickListener onItemClickListener;
-    private RealmResults<Event> results;
+    private RealmResults<CalenderEvent> results;
 
-    public BottomSheetAdapter(RealmResults<Event> results) {
+    public BottomSheetAdapter(RealmResults<CalenderEvent> results) {
         this.results = results;
     }
 
@@ -75,27 +79,31 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
             eventDescription = (TextView) itemView.findViewById(R.id.event_description);
         }
 
-        public void bind(Event item) {
+        public void bind(CalenderEvent item) {
             eventTitle.setText(item.getTitle());
             if(TextUtils.isEmpty(item.getDescription()))
                 eventDescription.setVisibility(View.GONE);
             else
                 eventDescription.setText(item.getDescription());
             switch (item.getEvent_type()){
-                case MASYA: imageView.setImageResource(R.drawable.khanda_black);
+                case AppConstants.MASYA:
+                    imageView.setImageResource(R.drawable.circle_black);
                     break;
-                case SAGRANDH: imageView.setImageResource(R.drawable.khanda_violet);
+                case AppConstants.SAGRANDH:
+                    imageView.setImageResource(R.drawable.circle_orange_dark);
                     break;
-                case GURUPURAB: imageView.setImageResource(R.drawable.khanda_red);
+                case AppConstants.GURUPURAB:
+                    imageView.setImageResource(R.drawable.circle_red);
                     break;
-                case PURANMASHI: imageView.setImageResource(R.drawable.khanda_yellow);
+                case AppConstants.PURANMASHI:
+                    imageView.setImageResource(R.drawable.circle_orange);
                     break;
-                case HISTORICAL_DAYS: imageView.setImageResource(R.drawable.khanda_blue);
+                case AppConstants.HISTORICAL_DAYS:
+                    imageView.setImageResource(R.drawable.circle_blue);
                     break;
-                case GOVERNMENT_HOLIDAY: imageView.setImageResource(R.drawable.khanda_blue);
+                case AppConstants.GOVERNMENT_HOLIDAY:
+                    imageView.setImageResource(R.drawable.circle_purple);
                     break;
-
-
             }
         }
 

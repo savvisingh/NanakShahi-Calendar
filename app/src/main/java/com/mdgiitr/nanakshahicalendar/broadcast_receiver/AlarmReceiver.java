@@ -12,11 +12,14 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.mdgiitr.nanakshahicalendar.model.Event;
+import com.mdgiitr.nanakshahicalendar.model.CalenderEvent;
 
 import apps.savvisingh.nanakshahicalendar.R;
 import com.mdgiitr.nanakshahicalendar.activities.HomeActivity;
 import com.mdgiitr.nanakshahicalendar.service.AlarmService;
+
+import java.util.Calendar;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -41,16 +44,15 @@ public class AlarmReceiver extends BroadcastReceiver {
         Log.d("AlarmReceiver", "onReceive");
 
         if(intent!=null){
-            int id = intent.getIntExtra("event_id", 0);
-            Event result = realm.where(Event.class).equalTo("id", id).findFirst();
 
-            RealmResults<Event> results = realm.where(Event.class).equalTo("day", result.getDay()).equalTo("month", result.getMonth()).equalTo("year", result.getYear()).findAll();
+            Calendar cal = Calendar.getInstance();
+            RealmResults<CalenderEvent> results = realm.where(CalenderEvent.class).equalTo("day", cal.get(Calendar.DAY_OF_MONTH)).equalTo("month", cal.get(Calendar.MONTH)).equalTo("year", cal.get(Calendar.YEAR)).findAll();
 
             Bitmap largeIcon = BitmapFactory.decodeResource(context.getResources(),
                     R.drawable.khanda_kesri_smallicon);
 
             if(results.size()>0){
-                for (Event event: results){
+                for (CalenderEvent calenderEvent : results){
 
                     PendingIntent myIntent = PendingIntent.getActivity(context, 0, new Intent(context, HomeActivity.class), 0);
 
@@ -61,15 +63,15 @@ public class AlarmReceiver extends BroadcastReceiver {
                             new NotificationCompat.Builder(context)
                                     .setSmallIcon(R.drawable.ic_khanda)
                                     .setTicker("Waheguru")
-                                    .setStyle(new NotificationCompat.BigTextStyle().bigText(event.getDescription()))
-                                    .setContentTitle(event.getTitle())
-                                    .setContentText(event.getDescription())
+                                    .setStyle(new NotificationCompat.BigTextStyle().bigText(calenderEvent.getDescription()))
+                                    .setContentTitle(calenderEvent.getTitle())
+                                    .setContentText(calenderEvent.getDescription())
                                     .setSound(defaultSoundUri)
                                     .setContentIntent(myIntent);
 
                     NotificationManager mNotificationManager = (NotificationManager) context
                             .getSystemService(Context.NOTIFICATION_SERVICE);
-                    mNotificationManager.notify(event.getId(),
+                    mNotificationManager.notify(calenderEvent.getId(),
                             mBuilder.build());
                 }
             }
