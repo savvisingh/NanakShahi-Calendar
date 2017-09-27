@@ -17,19 +17,19 @@ import com.mdgiitr.nanakshahicalendar.model.Event;
 import apps.savvisingh.nanakshahicalendar.R;
 import com.mdgiitr.nanakshahicalendar.activities.HomeActivity;
 import com.mdgiitr.nanakshahicalendar.service.AlarmService;
+
+import java.util.Calendar;
+
 import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class AlarmReceiver extends BroadcastReceiver {
-    public AlarmReceiver() {
-    }
+    public AlarmReceiver() {}
 
     private Realm realm;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // TODO: This method is called when the BroadcastReceiver is receiving
-        // an Intent broadcast.
 
         try {
             realm = Realm.getDefaultInstance();
@@ -41,13 +41,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         Log.d("AlarmReceiver", "onReceive");
 
         if(intent!=null){
-            int id = intent.getIntExtra("event_id", 0);
-            Event result = realm.where(Event.class).equalTo("id", id).findFirst();
-
-            RealmResults<Event> results = realm.where(Event.class).equalTo("day", result.getDay()).equalTo("month", result.getMonth()).equalTo("year", result.getYear()).findAll();
-
-            Bitmap largeIcon = BitmapFactory.decodeResource(context.getResources(),
-                    R.drawable.khanda_kesri_smallicon);
+            Calendar calobj = Calendar.getInstance();
+            RealmResults<Event> results = realm.where(Event.class).equalTo("day", calobj.get(Calendar.DAY_OF_MONTH)).equalTo("month", calobj.get(Calendar.MONTH)).equalTo("year", calobj.get(Calendar.YEAR)).findAll();
 
             if(results.size()>0){
                 for (Event event: results){
@@ -62,7 +57,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                                     .setSmallIcon(R.drawable.ic_khanda)
                                     .setTicker("Waheguru")
                                     .setStyle(new NotificationCompat.BigTextStyle().bigText(event.getDescription()))
-                                    .setContentTitle(event.getTitle())
+                                                            .setContentTitle(event.getTitle())
                                     .setContentText(event.getDescription())
                                     .setSound(defaultSoundUri)
                                     .setContentIntent(myIntent);
