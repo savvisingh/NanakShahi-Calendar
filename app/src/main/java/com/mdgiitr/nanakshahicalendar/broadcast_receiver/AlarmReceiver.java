@@ -41,11 +41,13 @@ public class AlarmReceiver extends BroadcastReceiver {
         Log.d("AlarmReceiver", "onReceive");
 
         if(intent!=null){
-            Calendar calobj = Calendar.getInstance();
-            RealmResults<Event> results = realm.where(Event.class).equalTo("day", calobj.get(Calendar.DAY_OF_MONTH)).equalTo("month", calobj.get(Calendar.MONTH)).equalTo("year", calobj.get(Calendar.YEAR)).findAll();
+
+
+            Calendar cal = Calendar.getInstance();
+            RealmResults<Event> results = realm.where(Event.class).equalTo("day", cal.get(Calendar.DAY_OF_MONTH)).equalTo("month", cal.get(Calendar.MONTH)).equalTo("year", cal.get(Calendar.YEAR)).findAll();
 
             if(results.size()>0){
-                for (Event event: results){
+                for (Event event : results){
 
                     PendingIntent myIntent = PendingIntent.getActivity(context, 0, new Intent(context, HomeActivity.class), 0);
 

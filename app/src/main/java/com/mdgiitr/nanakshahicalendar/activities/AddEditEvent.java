@@ -82,7 +82,7 @@ public class AddEditEvent extends AppCompatActivity {
             if(intent.getExtras() != null){
                 if(intent.getStringExtra("event_id") != null){
                     eventId = Integer.parseInt(intent.getStringExtra("event_id"));
-                    RealmResults<Event> realmResults = realm.where(com.mdgiitr.nanakshahicalendar.model.Event.class).equalTo("id", eventId).findAll();
+                    RealmResults<Event> realmResults = realm.where(Event.class).equalTo("id", eventId).findAll();
                     if(realmResults.size()>0){
                         event = realmResults.get(0);
                     }
@@ -127,7 +127,7 @@ public class AddEditEvent extends AppCompatActivity {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(Realm realm) {
-                        if(event!=null)
+                        if(event !=null)
                             event.deleteFromRealm();
                         onBackPressed();
                     }
@@ -152,7 +152,7 @@ public class AddEditEvent extends AppCompatActivity {
             return;
         }
 
-        if(event==null){
+        if(event ==null){
             event = new Event();
             event.setEvent_type(AppConstants.GOVERNMENT_HOLIDAY);
             int maxId = realm.where(Event.class).max("id").intValue();

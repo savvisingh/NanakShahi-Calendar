@@ -1,9 +1,11 @@
 package com.mdgiitr.nanakshahicalendar.activities;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -13,8 +15,6 @@ import android.widget.Toast;
 
 import com.mdgiitr.nanakshahicalendar.model.Event;
 import com.mdgiitr.nanakshahicalendar.util.AppConstants;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -36,6 +36,12 @@ public class EventActivity extends AppCompatActivity {
 
     @BindView(R.id.event_description)
     TextView eventDescription;
+
+    @BindView(R.id.toolbar_layout)
+    CollapsingToolbarLayout toolbarLayout;
+
+    @BindView(R.id.event_edit)
+    FloatingActionButton editFab;
 
     private String eventId = null;
 
@@ -66,6 +72,27 @@ public class EventActivity extends AppCompatActivity {
         else this.finish();
 
         Event event = realm.where(Event.class).equalTo("id", Integer.parseInt(eventId)).findFirst();
+
+        switch (event.getEvent_type()){
+            case AppConstants.MASYA:
+                editFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.black)));
+                break;
+            case AppConstants.SAGRANDH:
+                editFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.holo_orange_dark)));
+                break;
+            case AppConstants.GURUPURAB:
+                editFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.holo_red_dark)));
+                break;
+            case AppConstants.PURANMASHI:
+                editFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.holo_orange_light)));
+                break;
+            case AppConstants.HISTORICAL_DAYS:
+                editFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.holo_blue_dark)));
+                break;
+            case AppConstants.GOVERNMENT_HOLIDAY:
+                editFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.holo_purple)));
+                break;
+        }
 
         if(event != null){
             eventtitle.setText(event.getTitle());
