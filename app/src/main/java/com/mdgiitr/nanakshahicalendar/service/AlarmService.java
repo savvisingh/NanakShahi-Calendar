@@ -92,15 +92,10 @@ public class AlarmService extends IntentService {
             calobj.set(Calendar.HOUR_OF_DAY, 0);
             calobj.set(Calendar.MINUTE, 1);
 
-//            Log.d("Alarm time", calobj.getTime().toString() + " ");
-//            Log.d("Alarm time", calobj.getTimeInMillis() + " ");
-
-
 
             alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 
             intent = new Intent(this, AlarmReceiver.class);
-            intent.putExtra("event_id", event.getId());
             pendingIntent = PendingIntent.getBroadcast(this, event.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             if (Build.VERSION.SDK_INT >= 23) {
@@ -113,7 +108,6 @@ public class AlarmService extends IntentService {
         }
 
         realm.close();
-
 
     }
 

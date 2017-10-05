@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    >
+
+
+    <ImageView
+        android:layout_margin="4dp"
+        android:layout_width="8dp"
+        android:layout_height="8dp"
+        android:background="@drawable/circle_black"
+        android:id="@+id/imageView"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="textEnd"
+        android:gravity="end"
+        android:text="62"
+        android:minWidth="22dp"
+        android:id="@+id/event_date"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:textColor="@color/primary_text"/>
+
+    <TextView
+        android:id="@+id/event_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="4dp"
+        android:textSize="16sp"
+        android:maxLines="2"
+        android:textColor="@color/secondary_text"
+        android:text="Waheguru"
+        android:fontFamily="sans-serif-normal" />
+
+
+
+</LinearLayout>
