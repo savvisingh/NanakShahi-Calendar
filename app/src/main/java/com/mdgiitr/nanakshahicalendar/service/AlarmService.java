@@ -9,7 +9,7 @@ import android.os.Build;
 import android.util.Log;
 
 import com.mdgiitr.nanakshahicalendar.broadcast_receiver.AlarmReceiver;
-import com.mdgiitr.nanakshahicalendar.model.CalenderEvent;
+import com.mdgiitr.nanakshahicalendar.model.Event;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -76,19 +76,19 @@ public class AlarmService extends IntentService {
 
         realm = Realm.getDefaultInstance();
 
-        RealmResults<CalenderEvent> results = realm.where(CalenderEvent.class).greaterThan("date", currentDate).findAllSorted("date", Sort.ASCENDING);
+        RealmResults<Event> results = realm.where(Event.class).greaterThan("date", currentDate).findAllSorted("date", Sort.ASCENDING);
 
 
         if(results.size()>0){
 
-            CalenderEvent calenderEvent = results.get(0);
+            Event event = results.get(0);
 
 
             Calendar calobj = Calendar.getInstance();
 
-            calobj.set(Calendar.YEAR, calenderEvent.getYear());
-            calobj.set(Calendar.MONTH, calenderEvent.getMonth());
-            calobj.set(Calendar.DAY_OF_MONTH, calenderEvent.getDay());
+            calobj.set(Calendar.YEAR, event.getYear());
+            calobj.set(Calendar.MONTH, event.getMonth());
+            calobj.set(Calendar.DAY_OF_MONTH, event.getDay());
             calobj.set(Calendar.HOUR_OF_DAY, 0);
             calobj.set(Calendar.MINUTE, 1);
 
@@ -96,7 +96,7 @@ public class AlarmService extends IntentService {
             alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 
             intent = new Intent(this, AlarmReceiver.class);
-            pendingIntent = PendingIntent.getBroadcast(this, calenderEvent.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            pendingIntent = PendingIntent.getBroadcast(this, event.getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
             if (Build.VERSION.SDK_INT >= 23) {
                 alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calobj.getTimeInMillis(), pendingIntent);

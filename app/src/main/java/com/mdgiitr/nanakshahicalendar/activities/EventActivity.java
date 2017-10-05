@@ -2,7 +2,6 @@ package com.mdgiitr.nanakshahicalendar.activities;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -14,7 +13,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mdgiitr.nanakshahicalendar.model.CalenderEvent;
+import com.mdgiitr.nanakshahicalendar.model.Event;
 import com.mdgiitr.nanakshahicalendar.util.AppConstants;
 
 import java.text.SimpleDateFormat;
@@ -72,9 +71,9 @@ public class EventActivity extends AppCompatActivity {
             eventId = getIntent().getStringExtra("event_id");
         else this.finish();
 
-        CalenderEvent calenderEvent = realm.where(CalenderEvent.class).equalTo("id", Integer.parseInt(eventId)).findFirst();
+        Event event = realm.where(Event.class).equalTo("id", Integer.parseInt(eventId)).findFirst();
 
-        switch (calenderEvent.getEvent_type()){
+        switch (event.getEvent_type()){
             case AppConstants.MASYA:
                 editFab.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(this, android.R.color.black)));
                 break;
@@ -95,17 +94,17 @@ public class EventActivity extends AppCompatActivity {
                 break;
         }
 
-        if(calenderEvent != null){
-            eventtitle.setText(calenderEvent.getTitle());
+        if(event != null){
+            eventtitle.setText(event.getTitle());
 
-            if(calenderEvent.getDescription() != null)
-                eventDescription.setText(calenderEvent.getDescription());
+            if(event.getDescription() != null)
+                eventDescription.setText(event.getDescription());
             else
                 eventDescription.setVisibility(View.GONE);
 
-            myCalendar.set(Calendar.YEAR, calenderEvent.getYear());
-            myCalendar.set(Calendar.MONTH, calenderEvent.getMonth());
-            myCalendar.set(Calendar.DAY_OF_MONTH, calenderEvent.getDay());
+            myCalendar.set(Calendar.YEAR, event.getYear());
+            myCalendar.set(Calendar.MONTH, event.getMonth());
+            myCalendar.set(Calendar.DAY_OF_MONTH, event.getDay());
 
             SimpleDateFormat df = new SimpleDateFormat("dd MMM yyyy", Locale.US);
             String formattedDate = df.format(myCalendar.getTime());

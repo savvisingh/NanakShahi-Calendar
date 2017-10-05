@@ -11,27 +11,19 @@ import android.widget.TextView;
 
 import apps.savvisingh.nanakshahicalendar.R;
 
-import com.mdgiitr.nanakshahicalendar.calendarview.CustomEvent;
-import com.mdgiitr.nanakshahicalendar.model.CalenderEvent;
+import com.mdgiitr.nanakshahicalendar.model.Event;
 import com.mdgiitr.nanakshahicalendar.util.AppConstants;
 
 import io.realm.RealmResults;
-
-import static com.mdgiitr.nanakshahicalendar.util.AppConstants.GOVERNMENT_HOLIDAY;
-import static com.mdgiitr.nanakshahicalendar.util.AppConstants.GURUPURAB;
-import static com.mdgiitr.nanakshahicalendar.util.AppConstants.HISTORICAL_DAYS;
-import static com.mdgiitr.nanakshahicalendar.util.AppConstants.MASYA;
-import static com.mdgiitr.nanakshahicalendar.util.AppConstants.PURANMASHI;
-import static com.mdgiitr.nanakshahicalendar.util.AppConstants.SAGRANDH;
 
 /**
  * Created by Günhan on 28.02.2016.
  */
 public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.ItemHolder> {
     private OnItemClickListener onItemClickListener;
-    private RealmResults<CalenderEvent> results;
+    private RealmResults<Event> results;
 
-    public BottomSheetAdapter(RealmResults<CalenderEvent> results) {
+    public BottomSheetAdapter(RealmResults<Event> results) {
         this.results = results;
     }
 
@@ -79,7 +71,7 @@ public class BottomSheetAdapter extends RecyclerView.Adapter<BottomSheetAdapter.
             eventDescription = (TextView) itemView.findViewById(R.id.event_description);
         }
 
-        public void bind(CalenderEvent item) {
+        public void bind(Event item) {
             eventTitle.setText(item.getTitle());
             if(TextUtils.isEmpty(item.getDescription()))
                 eventDescription.setVisibility(View.GONE);

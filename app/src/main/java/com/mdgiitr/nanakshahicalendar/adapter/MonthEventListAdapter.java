@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mdgiitr.nanakshahicalendar.model.CalenderEvent;
+import com.mdgiitr.nanakshahicalendar.model.Event;
 import com.mdgiitr.nanakshahicalendar.util.AppConstants;
 
 import java.util.ArrayList;
@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import apps.savvisingh.nanakshahicalendar.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.realm.RealmResults;
 
 /**
  * Created by SavviSingh on 17/09/17.
@@ -23,10 +22,10 @@ import io.realm.RealmResults;
 
 public class MonthEventListAdapter extends RecyclerView.Adapter<MonthEventListAdapter.ItemHolder> {
 
-    private ArrayList<CalenderEvent> calenderEvents;
+    private ArrayList<Event> events;
 
-    public MonthEventListAdapter(ArrayList<CalenderEvent> calenderEvents){
-        this.calenderEvents = calenderEvents;
+    public MonthEventListAdapter(ArrayList<Event> events){
+        this.events = events;
     }
 
     @Override
@@ -38,7 +37,7 @@ public class MonthEventListAdapter extends RecyclerView.Adapter<MonthEventListAd
     @Override
     public void onBindViewHolder(ItemHolder holder, int position) {
 
-        CalenderEvent event = calenderEvents.get(position);
+        Event event = events.get(position);
 
         holder.textViewDate.setText(String.valueOf(event.getDay()));
         holder.textViewTitle.setText(event.getDescription());
@@ -67,7 +66,7 @@ public class MonthEventListAdapter extends RecyclerView.Adapter<MonthEventListAd
 
     @Override
     public int getItemCount() {
-        return calenderEvents.size();
+        return events.size();
     }
 
     public class ItemHolder extends RecyclerView.ViewHolder {

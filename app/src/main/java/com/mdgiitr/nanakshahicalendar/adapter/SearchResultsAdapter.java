@@ -10,7 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import apps.savvisingh.nanakshahicalendar.R;
-import com.mdgiitr.nanakshahicalendar.model.CalenderEvent;
+import com.mdgiitr.nanakshahicalendar.model.Event;
+
 import io.realm.RealmResults;
 
 /**
@@ -19,11 +20,11 @@ import io.realm.RealmResults;
 
 public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdapter.ViewHolder> {
 
-    RealmResults<CalenderEvent> results;
+    RealmResults<Event> results;
 
     private OnItemClickListener listener;
 
-    public SearchResultsAdapter(RealmResults<CalenderEvent> results, OnItemClickListener listener){
+    public SearchResultsAdapter(RealmResults<Event> results, OnItemClickListener listener){
         this.results = results;
         this.listener = listener;
     }
@@ -39,13 +40,13 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        CalenderEvent calenderEvent = results.get(position);
-        holder.eventTitle.setText(calenderEvent.getTitle());
-        holder.eventDescription.setText(calenderEvent.getDescription());
+        Event event = results.get(position);
+        holder.eventTitle.setText(event.getTitle());
+        holder.eventDescription.setText(event.getDescription());
 
 
         Calendar cal = Calendar.getInstance();
-        cal.set(calenderEvent.year, calenderEvent.month, calenderEvent.day);
+        cal.set(event.year, event.month, event.day);
 
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         String formattedDate = df.format(cal.getTime());
@@ -74,8 +75,8 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
         @Override
         public void onClick(View view) {
             if(listener!=null){
-                CalenderEvent calenderEvent = results.get(getAdapterPosition());
-                listener.onClick(calenderEvent.getId());
+                Event event = results.get(getAdapterPosition());
+                listener.onClick(event.getId());
             }
         }
     }

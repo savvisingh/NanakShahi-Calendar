@@ -1,7 +1,5 @@
 package com.mdgiitr.nanakshahicalendar.activities;
 
-//TODO Scroll calender scrollview to bottom if its last week
-//TODO Check for Recyclerview rendering in API 16
 
 import android.app.SearchManager;
 import android.content.ComponentName;
@@ -13,7 +11,6 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -32,10 +29,8 @@ import android.widget.TextView;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.mdgiitr.nanakshahicalendar.adapter.MonthEventListAdapter;
-import com.mdgiitr.nanakshahicalendar.model.CalenderEvent;
-import com.mdgiitr.nanakshahicalendar.util.Logr;
+import com.mdgiitr.nanakshahicalendar.model.Event;
 import com.p_v.flexiblecalendar.FlexibleCalendarView;
-import com.p_v.flexiblecalendar.entity.Event;
 import com.p_v.flexiblecalendar.view.BaseCellView;
 import com.mdgiitr.nanakshahicalendar.adapter.BottomSheetAdapter;
 import com.mdgiitr.nanakshahicalendar.calendarview.CustomEvent;
@@ -73,7 +68,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     private MonthEventListAdapter adapter;
 
-    private ArrayList<CalenderEvent> monthListevents;
+    private ArrayList<Event> monthListevents;
 
     @BindView(R.id.calender_layout)
     NestedScrollView calenderLayout;
@@ -111,8 +106,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         getSupportActionBar().setTitle(formattedDate);
 
-
-        Log.d("events", String.valueOf(realm.where(CalenderEvent.class).count()));
+        Log.d("events", String.valueOf(realm.where(Event.class).count()));
 
         AlarmService.setAlarm(this);
 
@@ -235,17 +229,17 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         calendarView.setEventDataProvider(new FlexibleCalendarView.EventDataProvider() {
             @Override
-            public List<? extends Event> getEventsForTheDay(int year, int month, int day) {
+            public List<? extends com.p_v.flexiblecalendar.entity.Event> getEventsForTheDay(int year, int month, int day) {
 
                 List<CustomEvent> colorLst = new ArrayList<>();
 
-                RealmResults<CalenderEvent> results = realm.where(CalenderEvent.class).equalTo("day", day)
+                RealmResults<Event> results = realm.where(Event.class).equalTo("day", day)
                         .equalTo("month", month).equalTo("year", year).findAll();
 
                 if(results.size()>0){
                     Log.d("Events", results.size() +" ");
-                    for(CalenderEvent calenderEvent :results){
-                        switch (calenderEvent.getEvent_type()) {
+                    for(Event event :results){
+                        switch (event.getEvent_type()) {
                             case AppConstants.MASYA:
                                 colorLst.add(new CustomEvent(android.R.color.black));
                                 break;
@@ -285,10 +279,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
                 getSupportActionBar().setTitle(formattedDate);
 
-                realm.where(CalenderEvent.class).equalTo("day", day)
-                        .equalTo("month", month).equalTo("year", year).findAllAsync().addChangeListener(new RealmChangeListener<RealmResults<CalenderEvent>>() {
+                realm.where(Event.class).equalTo("day", day)
+                        .equalTo("month", month).equalTo("year", year).findAllAsync().addChangeListener(new RealmChangeListener<RealmResults<Event>>() {
                             @Override
-                            public void onChange(RealmResults<CalenderEvent> realmResults) {
+                            public void onChange(RealmResults<Event> realmResults) {
                                 if(realmResults.size()>0){
                                     createDialog(realmResults);
                                 }
@@ -309,7 +303,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         return false;
     }
 
-    private void createDialog(final RealmResults<CalenderEvent> results) {
+    private void createDialog(final RealmResults<Event> results) {
         if (dismissDialog()) {
             return;
         }
@@ -339,7 +333,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-            super.onBackPressed();
+        if(monthLayout.getVisibility() == View.VISIBLE){
+            monthLayout.setVisibility(View.GONE);
+            calenderLayout.setVisibility(View.VISIBLE);
+            switchCalType.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_list_type_24dp));
+            return;
+        }
+
+        super.onBackPressed();
     }
 
     @Override
@@ -358,12 +359,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_about_us) {
             Intent intent = new Intent(HomeActivity.this, AboutDeveloper.class);
             startActivity(intent);
@@ -407,9 +404,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setMonthEventList(int month){
-        realm.where(CalenderEvent.class).equalTo("month", month).findAllSortedAsync("date", Sort.ASCENDING).addChangeListener(new RealmChangeListener<RealmResults<CalenderEvent>>() {
+        realm.where(Event.class).equalTo("month", month).findAllSortedAsync("date", Sort.ASCENDING).addChangeListener(new RealmChangeListener<RealmResults<Event>>() {
             @Override
-            public void onChange(RealmResults<CalenderEvent> element) {
+            public void onChange(RealmResults<Event> element) {
                 monthListevents.clear();
                 monthListevents.addAll(realm.copyFromRealm(element));
                 adapter.notifyDataSetChanged();

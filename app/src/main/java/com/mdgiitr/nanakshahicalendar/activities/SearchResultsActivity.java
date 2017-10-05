@@ -14,7 +14,7 @@ import android.view.View;
 import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
 import com.mdgiitr.nanakshahicalendar.adapter.SearchResultsAdapter;
-import com.mdgiitr.nanakshahicalendar.model.CalenderEvent;
+import com.mdgiitr.nanakshahicalendar.model.Event;
 
 import apps.savvisingh.nanakshahicalendar.R;
 
@@ -85,16 +85,16 @@ public class SearchResultsActivity extends AppCompatActivity implements SearchRe
 
             getSupportActionBar().setTitle(query);
 
-            RealmResults<CalenderEvent> results =
-                    realm.where(CalenderEvent.class)
+            RealmResults<Event> results =
+                    realm.where(Event.class)
                         .like("description", "*" + query + "*", Case.INSENSITIVE)
                         .or()
                         .like("title", "*" + query + "*", Case.INSENSITIVE)
                         .findAllAsync();
 
-            RealmChangeListener<RealmResults<CalenderEvent>> callback = new RealmChangeListener<RealmResults<CalenderEvent>>() {
+            RealmChangeListener<RealmResults<Event>> callback = new RealmChangeListener<RealmResults<Event>>() {
                 @Override
-                public void onChange(RealmResults<CalenderEvent> element) {
+                public void onChange(RealmResults<Event> element) {
                     if(element!=null && element.size() > 0){
                         recyclerView.setVisibility(View.VISIBLE);
                         textViewNoResults.setVisibility(View.GONE);
