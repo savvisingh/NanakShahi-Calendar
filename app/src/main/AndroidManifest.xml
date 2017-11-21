@@ -25,7 +25,8 @@
 
         <activity
             android:name="com.mdgiitr.nanakshahicalendar.activities.HomeActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:launchMode="singleInstance">
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".activities.SearchResultsActivity" />

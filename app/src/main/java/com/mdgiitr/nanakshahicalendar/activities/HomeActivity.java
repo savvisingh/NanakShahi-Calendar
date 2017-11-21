@@ -30,6 +30,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.mdgiitr.nanakshahicalendar.adapter.MonthEventListAdapter;
 import com.mdgiitr.nanakshahicalendar.model.Event;
+import com.mdgiitr.nanakshahicalendar.util.MyApplication;
 import com.p_v.flexiblecalendar.FlexibleCalendarView;
 import com.p_v.flexiblecalendar.view.BaseCellView;
 import com.mdgiitr.nanakshahicalendar.adapter.BottomSheetAdapter;
@@ -40,6 +41,8 @@ import com.mdgiitr.nanakshahicalendar.util.AppConstants;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -83,6 +86,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     AppBarLayout appBarLayout;
 
     private Realm realm;
+
+    @BindView(R.id.toolbar_date_text)
+    TextView dateText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,10 +108,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         Calendar cal = Calendar.getInstance();
         toolbarCal = Calendar.getInstance();
 
-        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-        String formattedDate = df.format(cal.getTime());
+//        SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+//        String formattedDate = df.format(cal.getTime());
 
-        getSupportActionBar().setTitle(formattedDate);
+        dateText.setText(MyApplication.getPunjabidate(toolbarCal));
+
 
         Log.d("events", String.valueOf(realm.where(Event.class).count()));
 
@@ -117,7 +125,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        getSupportActionBar().setTitle("");
         monthListevents = new ArrayList<>();
         adapter = new MonthEventListAdapter(monthListevents);
         monthEventList.setAdapter(adapter);
@@ -154,8 +162,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         final Calendar cal = Calendar.getInstance();
         cal.set(calendarView.getSelectedDateItem().getYear(), calendarView.getSelectedDateItem().getMonth(), 1);
-        monthTextView.setText(cal.getDisplayName(Calendar.MONTH,
-                Calendar.LONG, Locale.ENGLISH));
+        monthTextView.setText(cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH) + "-" + cal.get(Calendar.YEAR));
         setMonthEventList(cal.get(Calendar.MONTH));
 
 
@@ -177,14 +184,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             public void onMonthChange(int year, int month, @FlexibleCalendarView.Direction int direction) {
                 toolbarCal.set(year, month, 1);
 
-                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-                String formattedDate = df.format(toolbarCal.getTime());
+//                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+//                String formattedDate = df.format(toolbarCal.getTime());
 
-                getSupportActionBar().setTitle(formattedDate);
+                monthTextView.setText(toolbarCal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH) + "-" + toolbarCal.get(Calendar.YEAR));
 
-
-                monthTextView.setText(toolbarCal.getDisplayName(Calendar.MONTH,
-                        Calendar.LONG, Locale.ENGLISH));
+                dateText.setText(MyApplication.getPunjabidate(toolbarCal));
 
                 setMonthEventList(month);
 
@@ -274,10 +279,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             public void onDateClick(int year, int month, int day) {
 
                 toolbarCal.set(year, month, day);
-                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
-                String formattedDate = df.format(toolbarCal.getTime());
+//                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
+//                String formattedDate = df.format(toolbarCal.getTime());
 
-                getSupportActionBar().setTitle(formattedDate);
+                dateText.setText(MyApplication.getPunjabidate(toolbarCal));
 
                 realm.where(Event.class).equalTo("day", day)
                         .equalTo("month", month).equalTo("year", year).findAllAsync().addChangeListener(new RealmChangeListener<RealmResults<Event>>() {
