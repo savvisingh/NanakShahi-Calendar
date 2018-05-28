@@ -163,7 +163,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         final Calendar cal = Calendar.getInstance();
         cal.set(calendarView.getSelectedDateItem().getYear(), calendarView.getSelectedDateItem().getMonth(), 1);
         monthTextView.setText(cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH) + "-" + cal.get(Calendar.YEAR));
-        setMonthEventList(cal.get(Calendar.MONTH));
+        setMonthEventList(cal.get(Calendar.MONTH), cal.get(Calendar.YEAR));
 
 
         leftArrow.setOnClickListener(new View.OnClickListener() {
@@ -191,7 +191,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
                 dateText.setText(MyApplication.getPunjabidate(toolbarCal));
 
-                setMonthEventList(month);
+                setMonthEventList(month, year);
 
             }
         });
@@ -408,8 +408,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void setMonthEventList(int month){
-        realm.where(Event.class).equalTo("month", month).findAllSortedAsync("date", Sort.ASCENDING).addChangeListener(new RealmChangeListener<RealmResults<Event>>() {
+    private void setMonthEventList(int month, int year){
+        realm.where(Event.class).equalTo("month", month).equalTo("year", year).findAllSortedAsync("date", Sort.ASCENDING).addChangeListener(new RealmChangeListener<RealmResults<Event>>() {
             @Override
             public void onChange(RealmResults<Event> element) {
                 monthListevents.clear();
