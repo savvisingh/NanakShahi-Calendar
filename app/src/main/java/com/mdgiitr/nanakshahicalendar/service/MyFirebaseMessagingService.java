@@ -161,8 +161,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .setContentTitle(remoteMessage.getNotification().getTitle())
                         .setContentText(remoteMessage.getNotification().getBody())
                         .setContentIntent(pendingIntent)
-                        .setSound(defaultSoundUri)
-                        .setOngoing(true);
+                        .setSound(defaultSoundUri);
 
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         assert mNotificationManager != null;

@@ -71,12 +71,12 @@ public class MyApplication extends Application {
         punjabiMonthEnd = new HashMap<>();
 
         DayMonth chetStart = new DayMonth(14, 3);
-        DayMonth chetEnd = new DayMonth(12, 4);
+        DayMonth chetEnd = new DayMonth(13, 4);
         punjabiMonthStart.put("Chet", chetStart);
         punjabiMonthEnd.put("Chet", chetEnd);
 
 
-        DayMonth vaisakhStart = new DayMonth(13, 4);
+        DayMonth vaisakhStart = new DayMonth(14, 4);
         DayMonth vaisakhEnd = new DayMonth(13, 5);
         punjabiMonthStart.put("Vaisakh", vaisakhStart);
         punjabiMonthEnd.put("Vaisakh", vaisakhEnd);
@@ -94,16 +94,16 @@ public class MyApplication extends Application {
         punjabiMonthEnd.put("Harh", HarhEnd);
 
         DayMonth SawanStart = new DayMonth(16, 7);
-        DayMonth SawanEnd = new DayMonth(15, 8);
+        DayMonth SawanEnd = new DayMonth(16, 8);
         punjabiMonthStart.put("Sawan", SawanStart);
         punjabiMonthEnd.put("Sawan", SawanEnd);
 
-        DayMonth BhadonStart = new DayMonth(16, 8);
-        DayMonth BhadonEnd = new DayMonth(15, 9);
+        DayMonth BhadonStart = new DayMonth(17, 8);
+        DayMonth BhadonEnd = new DayMonth(16, 9);
         punjabiMonthStart.put("Bhadon", BhadonStart);
         punjabiMonthEnd.put("Bhadon", BhadonEnd);
 
-        DayMonth AssuStart = new DayMonth(16, 9);
+        DayMonth AssuStart = new DayMonth(17, 9);
         DayMonth AssuEnd = new DayMonth(16, 10);
         punjabiMonthStart.put("Assu", AssuStart);
         punjabiMonthEnd.put("Assu", AssuEnd);
@@ -114,7 +114,7 @@ public class MyApplication extends Application {
         punjabiMonthEnd.put("Katak", KatakEnd);
 
         DayMonth MagharStart = new DayMonth(16, 11);
-        DayMonth MagharEnd = new DayMonth(14, 12);
+        DayMonth MagharEnd = new DayMonth(15, 12);
         punjabiMonthStart.put("Maghar", MagharStart);
         punjabiMonthEnd.put("Maghar", MagharEnd);
 
@@ -124,11 +124,11 @@ public class MyApplication extends Application {
 //        punjabiMonthEnd.put("Poh", PohEnd);
 
         DayMonth MaghStart = new DayMonth(14, 1);
-        DayMonth MaghEnd = new DayMonth(11, 2);
+        DayMonth MaghEnd = new DayMonth(12, 2);
         punjabiMonthStart.put("Magh", MaghStart);
         punjabiMonthEnd.put("Magh", MaghEnd);
 
-        DayMonth PhagunStart = new DayMonth(12, 2);
+        DayMonth PhagunStart = new DayMonth(13, 2);
         DayMonth PhagunEnd = new DayMonth(13, 3);
         punjabiMonthStart.put("Phagun", PhagunStart);
         punjabiMonthEnd.put("Phagun", PhagunEnd);
@@ -142,9 +142,9 @@ public class MyApplication extends Application {
         String month = "";
         int day = 0;
         if(dayMonth.getMonth() == 12){
-            if (dayMonth.getDay() >= 15){
+            if (dayMonth.getDay() >= 16){
                 month = "Poh";
-                day = dayMonth.getDay() - 15 + 1;
+                day = dayMonth.getDay() - 16 + 1;
             }
         }
         if(dayMonth.getMonth() == 1){
@@ -152,7 +152,7 @@ public class MyApplication extends Application {
                 month = "Poh";
                 calendar.set(Calendar.MONTH, 11);
                 int maxdays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-                day = maxdays - 15 + dayMonth.getDay() + 1;
+                day = maxdays - 16 + dayMonth.getDay() + 1;
             }
         }
 
@@ -173,6 +173,6 @@ public class MyApplication extends Application {
             }
         }
 
-        return day + "-" + month + "-549";
+        return day + "-" + month + "-550";
     }
 }
