@@ -19,6 +19,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.mdgiitr.nanakshahicalendar.activities.HomeActivity;
@@ -42,10 +44,23 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     @Override
+    public void onNewToken(String s) {
+        super.onNewToken(s);
+
+        Log.d(TAG, "Refreshed token: " + s);
+        FirebaseMessaging.getInstance().subscribeToTopic("updates");
+        FirebaseMessaging.getInstance().subscribeToTopic("UpdateDatabase");
+        FirebaseMessaging.getInstance().subscribeToTopic("notify");
+    }
+
+    @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: " + remoteMessage.getFrom());
+
+        if(remoteMessage.getNotification() != null)
+            sendNotification(remoteMessage);
 
         String from = remoteMessage.getFrom();
         if(from.equalsIgnoreCase(UPDATE_DATABASE_TOPIC)){
@@ -55,8 +70,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 return;
             }
         }
-
-        sendNotification(remoteMessage);
     }
 
     @Override

@@ -15,9 +15,7 @@ import com.crashlytics.android.answers.Answers;
 import com.crashlytics.android.answers.CustomEvent;
 import com.mdgiitr.nanakshahicalendar.adapter.SearchResultsAdapter;
 import com.mdgiitr.nanakshahicalendar.model.Event;
-
 import apps.savvisingh.nanakshahicalendar.R;
-
 import com.mdgiitr.nanakshahicalendar.util.MySuggestionProvider;
 
 import butterknife.BindView;

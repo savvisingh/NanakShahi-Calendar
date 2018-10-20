@@ -2,6 +2,8 @@ package com.mdgiitr.nanakshahicalendar.util;
 
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+
 import apps.savvisingh.nanakshahicalendar.BuildConfig;
 
 /** Log utility class to handle the log tag and DEBUG-only logging. */
@@ -16,5 +18,9 @@ public class Logr {
     if (BuildConfig.DEBUG) {
       d(String.format(message, args));
     }
+  }
+
+  public static void e(Exception e){
+    Crashlytics.logException(e);
   }
 }

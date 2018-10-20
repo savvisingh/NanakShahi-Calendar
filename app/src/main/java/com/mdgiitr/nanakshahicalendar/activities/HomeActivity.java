@@ -38,6 +38,7 @@ import com.mdgiitr.nanakshahicalendar.calendarview.CustomEvent;
 import com.mdgiitr.nanakshahicalendar.service.AlarmService;
 import com.mdgiitr.nanakshahicalendar.util.AppConstants;
 
+import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -90,12 +91,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @BindView(R.id.toolbar_date_text)
     TextView dateText;
 
+    public WeakReference<HomeActivity> weakReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-
+        weakReference = new WeakReference<>(this);
         mAdView = (AdView) findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
@@ -279,8 +282,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             public void onDateClick(int year, int month, int day) {
 
                 toolbarCal.set(year, month, day);
-//                SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy", Locale.US);
-//                String formattedDate = df.format(toolbarCal.getTime());
 
                 dateText.setText(MyApplication.getPunjabidate(toolbarCal));
 
@@ -288,9 +289,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                         .equalTo("month", month).equalTo("year", year).findAllAsync().addChangeListener(new RealmChangeListener<RealmResults<Event>>() {
                             @Override
                             public void onChange(RealmResults<Event> realmResults) {
-                                if(realmResults.size()>0){
-                                    createDialog(realmResults);
-                                }
+                                if(weakReference.get() != null && !weakReference.get().isFinishing())
+                                    if(realmResults.size()>0){
+                                        createDialog(realmResults);
+                                    }
                             }
                         });
 
