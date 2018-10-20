@@ -34,6 +34,18 @@ android {
             signingConfig signingConfigs.config
         }
     }
+
+    bundle {
+        language {
+            enableSplit = false
+        }
+        density {
+            enableSplit = false
+        }
+        abi {
+            enableSplit = true
+        }
+    }
 }
 
 dependencies {
