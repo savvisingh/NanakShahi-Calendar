@@ -25,7 +25,8 @@
             />
         <provider
             android:name="com.mdgiitr.nanakshahicalendar.util.MySuggestionProvider"
-            android:authorities="com.mdgiitr.nanakshahicalendar.util.MySuggestionProvider" />
+            android:authorities="com.mdgiitr.nanakshahicalendar.search"
+            android:exported="false"/>
 
         <activity
             android:name="com.mdgiitr.nanakshahicalendar.activities.HomeActivity"
