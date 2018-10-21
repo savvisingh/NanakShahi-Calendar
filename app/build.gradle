@@ -20,7 +20,7 @@ android {
         applicationId "com.mdgiitr.nanakshahicalendar"
         minSdkVersion 15
         targetSdkVersion 27
-        versionCode 22
+        versionCode 23
         versionName "5.6.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true

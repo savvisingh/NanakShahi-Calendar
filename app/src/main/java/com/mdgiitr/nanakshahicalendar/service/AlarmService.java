@@ -95,8 +95,8 @@ public class AlarmService extends IntentService {
                 calobj.set(Calendar.YEAR, event.getYear());
                 calobj.set(Calendar.MONTH, event.getMonth());
                 calobj.set(Calendar.DAY_OF_MONTH, event.getDay());
-                calobj.set(Calendar.HOUR_OF_DAY, 8);
-                calobj.set(Calendar.MINUTE, 0);
+                calobj.set(Calendar.HOUR_OF_DAY, 0);
+                calobj.set(Calendar.MINUTE, 1);
 
 
                 alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
